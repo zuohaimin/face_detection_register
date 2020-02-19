@@ -39,4 +39,8 @@ public class FaceRequestParam {
 
     @JsonProperty(value = "face_token")
     private String faceToken;
+
+    @JsonProperty(value = "face_type")
+    private String faceType;
+
 }

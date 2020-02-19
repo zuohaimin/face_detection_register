@@ -3,6 +3,7 @@ package cn.edu.swpu.face_detection_register.service;
 import cn.edu.swpu.face_detection_register.model.dto.FaceRequestParam;
 import cn.edu.swpu.face_detection_register.model.vo.AccessTokenVo;
 import cn.edu.swpu.face_detection_register.model.vo.FaceRegisterVo;
+import cn.edu.swpu.face_detection_register.model.vo.MatchFaceVo;
 import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
 
 /**
@@ -39,6 +40,13 @@ public interface IFaceDetectionService {
      * @return
      */
     ResponseVo deleteFace(FaceRequestParam faceRequestParam);
+
+    /**
+     * 人脸匹配
+     * @param faceRequestParam
+     * @return
+     */
+    ResponseVo<MatchFaceVo> matchFace(FaceRequestParam faceRequestParam);
 
 
 }

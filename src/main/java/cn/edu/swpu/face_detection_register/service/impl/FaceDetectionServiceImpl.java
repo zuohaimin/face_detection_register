@@ -11,6 +11,7 @@ import cn.edu.swpu.face_detection_register.cons.FaceDetectionRegisterConstrant;
 import cn.edu.swpu.face_detection_register.model.dto.FaceRequestParam;
 import cn.edu.swpu.face_detection_register.model.vo.AccessTokenVo;
 import cn.edu.swpu.face_detection_register.model.vo.FaceRegisterVo;
+import cn.edu.swpu.face_detection_register.model.vo.MatchFaceVo;
 import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
 import cn.edu.swpu.face_detection_register.service.IFaceDetectionService;
 import com.alibaba.fastjson.JSON;
@@ -27,25 +28,26 @@ public class FaceDetectionServiceImpl implements IFaceDetectionService {
 
     @Override
     public AccessTokenVo getAccessToken() {
+        //TODO 添加对缓存的支持
         return restTemplate.getForObject(FaceDetectionRegisterConstrant.BAIDU_GET_ACCESSTOKEN, AccessTokenVo.class,FaceDetectionRegisterConstrant.API_KEY,FaceDetectionRegisterConstrant.SECRET_KEY);
+    }
+
+    private ResponseVo<FaceRegisterVo> commonOperation(FaceRequestParam faceRequestParam,String url) {
+        //获取access_token
+        AccessTokenVo accessTokenVo = getAccessToken();
+        HttpEntity<FaceRequestParam> request= getHttpEntity(faceRequestParam);
+        String responseVo = restTemplate.postForObject(url,request,String.class,accessTokenVo.getAccessToken());
+        return JSON.parseObject(responseVo, new TypeReference<ResponseVo<FaceRegisterVo>>(){});
     }
 
     @Override
     public ResponseVo<FaceRegisterVo> registerFace(FaceRequestParam faceRequestParam) {
-        //获取access_token
-        //TODO 添加对缓存的支持
-        AccessTokenVo accessTokenVo = getAccessToken();
-        HttpEntity<FaceRequestParam> request= getHttpEntity(faceRequestParam);
-        String responseVo = restTemplate.postForObject(FaceDetectionRegisterConstrant.BAIDU_ADD_FACE,request,String.class,accessTokenVo.getAccessToken());
-        return JSON.parseObject(responseVo, new TypeReference<ResponseVo<FaceRegisterVo>>(){});
+        return commonOperation(faceRequestParam,FaceDetectionRegisterConstrant.BAIDU_ADD_FACE);
     }
 
     @Override
     public ResponseVo<FaceRegisterVo> updateFace(FaceRequestParam faceRequestParam) {
-        AccessTokenVo accessTokenVo = getAccessToken();
-        HttpEntity<FaceRequestParam> request= getHttpEntity(faceRequestParam);
-        String responseVo = restTemplate.postForObject(FaceDetectionRegisterConstrant.BAIDU_UPDATE_FACE,request,String.class,accessTokenVo.getAccessToken());
-        return JSON.parseObject(responseVo, new TypeReference<ResponseVo<FaceRegisterVo>>(){});
+        return commonOperation(faceRequestParam,FaceDetectionRegisterConstrant.BAIDU_UPDATE_FACE);
     }
 
     @Override
@@ -61,6 +63,13 @@ public class FaceDetectionServiceImpl implements IFaceDetectionService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(data,headers);
     }
+
+    @Override
+    public ResponseVo<MatchFaceVo> matchFace(FaceRequestParam faceRequestParam) {
+        
+        return null;
+    }
+
     public static void main(String[] args) {
         FaceDetectionServiceImpl faceDetectionService = new FaceDetectionServiceImpl();
         String param = "{\n" +
