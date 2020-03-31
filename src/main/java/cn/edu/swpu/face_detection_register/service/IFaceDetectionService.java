@@ -1,5 +1,7 @@
 package cn.edu.swpu.face_detection_register.service;
 
+import java.util.List;
+
 import cn.edu.swpu.face_detection_register.model.dto.FaceRequestParam;
 import cn.edu.swpu.face_detection_register.model.vo.AccessTokenVo;
 import cn.edu.swpu.face_detection_register.model.vo.FaceRegisterVo;
@@ -46,7 +48,15 @@ public interface IFaceDetectionService {
      * @param faceRequestParam
      * @return
      */
-    ResponseVo<MatchFaceVo> matchFace(FaceRequestParam faceRequestParam);
+    ResponseVo<MatchFaceVo> matchFace(List<FaceRequestParam> faceRequestParam);
+
+
+    /**
+     * 检测人脸
+     * @param faceRequestParam
+     * @return
+     */
+    //ResponseVo<> detectFace(FaceRequestParam faceRequestParam);
 
 
 }

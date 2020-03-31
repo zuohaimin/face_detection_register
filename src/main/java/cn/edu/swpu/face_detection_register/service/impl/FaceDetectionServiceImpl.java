@@ -1,5 +1,7 @@
 package cn.edu.swpu.face_detection_register.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpEntity;
@@ -65,9 +67,11 @@ public class FaceDetectionServiceImpl implements IFaceDetectionService {
     }
 
     @Override
-    public ResponseVo<MatchFaceVo> matchFace(FaceRequestParam faceRequestParam) {
-        
-        return null;
+    public ResponseVo<MatchFaceVo> matchFace(List<FaceRequestParam> faceRequestParam) {
+        AccessTokenVo accessTokenVo = getAccessToken();
+        HttpEntity<List<FaceRequestParam>> request= getHttpEntity(faceRequestParam);
+        String responseVo = restTemplate.postForObject(FaceDetectionRegisterConstrant.BAIDU_MATCH_FACE,request,String.class,accessTokenVo.getAccessToken());
+        return JSON.parseObject(responseVo, new TypeReference<ResponseVo<MatchFaceVo>>(){});
     }
 
     public static void main(String[] args) {

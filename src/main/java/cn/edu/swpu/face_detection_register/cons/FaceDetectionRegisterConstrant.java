@@ -14,4 +14,5 @@ public interface FaceDetectionRegisterConstrant {
     String BAIDU_UPDATE_FACE = "https://aip.baidubce.com/rest/2.0/face/v3/faceset/user/update?access_token={1}";
     String BAIDU_DELETE_FACE = "https://aip.baidubce.com/rest/2.0/face/v3/faceset/face/delete?access_token={1}";
     String BAIDU_MATCH_FACE = "https://aip.baidubce.com/rest/2.0/face/v3/match?access_token={1}";
+    String BAIDU_DETECT_FACE = "https://aip.baidubce.com/rest/2.0/face/v3/detect?access_token={1}";
 }
