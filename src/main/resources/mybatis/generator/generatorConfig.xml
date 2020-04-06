@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="D:\repository\mysql\mysql-connector-java\5.1.46\mysql-connector-java-5.1.46.jar" />
+
+
+    <context id="mysql" targetRuntime="MyBatis3Simple">
+        <!--optional,旨在创建class时，对注释进行控制-->
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/face_detection"
+                        userId="root"
+                        password="pwd@jicai123">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="true" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="cn.edu.swpu.face_detection_register.model.bo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="false" />
+            <property name="constructorBased" value="false"/>
+            <!-- 建立modal对象是否不可改变 即生成的modal对象不会有setter方法，只有构造方法 -->
+            <property name="immutable" value="true" />
+
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mybatis"  targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.edu.swpu.face_detection_register.dao"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table tableName="UserInfo" domainObjectName="UserInfo"><property name="useActualColumnNames" value="true"/></table>
+        <table tableName="UserRole" domainObjectName="UserRole"><property name="useActualColumnNames" value="true"/></table>
+        <table tableName="Role" domainObjectName="Role"><property name="useActualColumnNames" value="true"/></table>
+        <table tableName="Resource" domainObjectName="Resource"><property name="useActualColumnNames" value="true"/></table>
+        <table tableName="RoleResource" domainObjectName="RoleResource"><property name="useActualColumnNames" value="true"/></table>
+
+
+    </context>
+</generatorConfiguration>

@@ -1,5 +1,6 @@
 package cn.edu.swpu.face_detection_register.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FaceRequestParam {
     private String image;
 
@@ -42,5 +44,8 @@ public class FaceRequestParam {
 
     @JsonProperty(value = "face_type")
     private String faceType;
+
+    @JsonProperty(value = "face_field")
+    private String faceField;
 
 }

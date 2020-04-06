@@ -3,10 +3,7 @@ package cn.edu.swpu.face_detection_register.service;
 import java.util.List;
 
 import cn.edu.swpu.face_detection_register.model.dto.FaceRequestParam;
-import cn.edu.swpu.face_detection_register.model.vo.AccessTokenVo;
-import cn.edu.swpu.face_detection_register.model.vo.FaceRegisterVo;
-import cn.edu.swpu.face_detection_register.model.vo.MatchFaceVo;
-import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
+import cn.edu.swpu.face_detection_register.model.vo.*;
 
 /**
  * @Author: 季才
@@ -44,7 +41,7 @@ public interface IFaceDetectionService {
     ResponseVo deleteFace(FaceRequestParam faceRequestParam);
 
     /**
-     * 人脸匹配
+     * 人脸匹配，比较两张脸的面部信息
      * @param faceRequestParam
      * @return
      */
@@ -52,11 +49,11 @@ public interface IFaceDetectionService {
 
 
     /**
-     * 检测人脸
+     * 检测人脸,获取人脸参数，后期面部信息的重要接口
      * @param faceRequestParam
      * @return
      */
-    //ResponseVo<> detectFace(FaceRequestParam faceRequestParam);
+    ResponseVo<DetectFaceVo> detectFace(FaceRequestParam faceRequestParam);
 
 
 }
