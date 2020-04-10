@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.swpu.face_detection_register.dao.FaceMsgInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.swpu.face_detection_register.model.bo.FaceMsgInfo">
+    <constructor>
+      <idArg column="keyId" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="userId" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="age" javaType="java.lang.Short" jdbcType="SMALLINT" />
+      <arg column="faceShape" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="gender" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="glasses" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="emotion" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="beauty" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="expression" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="addTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modifyTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="isDelete" javaType="java.lang.Byte" jdbcType="TINYINT" />
+    </constructor>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from facemsginfo
+    where keyId = #{keyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.FaceMsgInfo">
+    insert into facemsginfo (keyId, userId, age, 
+      faceShape, gender, glasses, 
+      emotion, beauty, expression, 
+      addTime, modifyTime, isDelete
+      )
+    values (#{keyId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{age,jdbcType=SMALLINT}, 
+      #{faceShape,jdbcType=CHAR}, #{gender,jdbcType=CHAR}, #{glasses,jdbcType=CHAR}, 
+      #{emotion,jdbcType=CHAR}, #{beauty,jdbcType=TINYINT}, #{expression,jdbcType=CHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.FaceMsgInfo">
+    update facemsginfo
+    set userId = #{userId,jdbcType=VARCHAR},
+      age = #{age,jdbcType=SMALLINT},
+      faceShape = #{faceShape,jdbcType=CHAR},
+      gender = #{gender,jdbcType=CHAR},
+      glasses = #{glasses,jdbcType=CHAR},
+      emotion = #{emotion,jdbcType=CHAR},
+      beauty = #{beauty,jdbcType=TINYINT},
+      expression = #{expression,jdbcType=CHAR},
+      addTime = #{addTime,jdbcType=TIMESTAMP},
+      modifyTime = #{modifyTime,jdbcType=TIMESTAMP},
+      isDelete = #{isDelete,jdbcType=TINYINT}
+    where keyId = #{keyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select keyId, userId, age, faceShape, gender, glasses, emotion, beauty, expression, 
+    addTime, modifyTime, isDelete
+    from facemsginfo
+    where keyId = #{keyId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select keyId, userId, age, faceShape, gender, glasses, emotion, beauty, expression, 
+    addTime, modifyTime, isDelete
+    from facemsginfo
+  </select>
+  <select id="selectFaceMsgGroupByAge" resultType="cn.edu.swpu.face_detection_register.model.vo.EchartsDataVo">
+    SELECT age as name,COUNT(*) AS value
+    FROM facemsginfo
+    WHERE isDelete = 0
+    GROUP BY age
+  </select>
+  <select id="selectFaceMsgGroupByFaceShape"
+          resultType="cn.edu.swpu.face_detection_register.model.vo.EchartsDataVo">
+    SELECT faceShape as name,COUNT(*) AS value
+    FROM facemsginfo
+    WHERE isDelete = 0
+    GROUP BY faceShape
+  </select>
+  <select id="selectFaceMsgGroupByBeauty"
+          resultType="cn.edu.swpu.face_detection_register.model.vo.EchartsDataVo">
+    SELECT beauty as name,COUNT(*) AS value
+    FROM facemsginfo
+    WHERE isDelete = 0
+    GROUP BY beauty
+  </select>
+  <select id="selectFaceMsgGroupByGender"
+          resultType="cn.edu.swpu.face_detection_register.model.vo.EchartsDataVo">
+    SELECT gender as name,COUNT(*) AS value
+    FROM facemsginfo
+    WHERE isDelete = 0
+    GROUP BY gender
+  </select>
+
+</mapper>
