@@ -1,5 +1,6 @@
 package cn.edu.swpu.face_detection_register.model.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,7 +18,7 @@ import lombok.ToString;
 @Setter
 @ToString
 //@JsonInclude(JsonInclude.Include.NON_NULL)
-public class DetectFaceVo {
+public class DetectFaceVo implements Serializable {
 
     @JsonProperty(value = "face_num")
     private Integer faceNum;

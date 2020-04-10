@@ -41,11 +41,12 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="UserInfo" domainObjectName="UserInfo"><property name="useActualColumnNames" value="true"/></table>
-        <table tableName="UserRole" domainObjectName="UserRole"><property name="useActualColumnNames" value="true"/></table>
-        <table tableName="Role" domainObjectName="Role"><property name="useActualColumnNames" value="true"/></table>
-        <table tableName="Resource" domainObjectName="Resource"><property name="useActualColumnNames" value="true"/></table>
-        <table tableName="RoleResource" domainObjectName="RoleResource"><property name="useActualColumnNames" value="true"/></table>
+<!--        <table tableName="UserInfo" domainObjectName="UserInfo"><property name="useActualColumnNames" value="true"/></table>-->
+<!--        <table tableName="UserRole" domainObjectName="UserRole"><property name="useActualColumnNames" value="true"/></table>-->
+<!--        <table tableName="Role" domainObjectName="Role"><property name="useActualColumnNames" value="true"/></table>-->
+<!--        <table tableName="Resource" domainObjectName="Resource"><property name="useActualColumnNames" value="true"/></table>-->
+<!--        <table tableName="RoleResource" domainObjectName="RoleResource"><property name="useActualColumnNames" value="true"/></table>-->
+        <table tableName="facemsginfo" domainObjectName="FaceMsgInfo"><property name="useActualColumnNames" value="true"/></table>
 
 
     </context>

@@ -1,5 +1,6 @@
 package cn.edu.swpu.face_detection_register.model.vo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class MatchFaceVo {
+public class MatchFaceVo implements Serializable {
 
     @JsonProperty(value = "score")
     private BigDecimal score;

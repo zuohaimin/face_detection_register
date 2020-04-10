@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @Author: 季才
  * @Date: 2020/1/8
@@ -16,7 +18,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ResponseVo<T> {
+public class ResponseVo<T> implements Serializable {
     @JsonProperty(value = "error_code")
     private String errorCode;
 

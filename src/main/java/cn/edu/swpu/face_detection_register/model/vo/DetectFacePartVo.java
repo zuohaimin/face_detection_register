@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Map;
 @Setter
 @ToString
 @ApiModel(value = "检测人脸返回参数")
-public class DetectFacePartVo {
+public class DetectFacePartVo implements Serializable {
     @JsonProperty(value = "face_token")
     private String faceToken;
 

@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserInfo {
+public class UserInfo implements Serializable {
     private String userId;
 
     private String userName;
@@ -24,5 +25,6 @@ public class UserInfo {
 
     private Integer isDelete;
 
-
+    public UserInfo() {
+    }
 }

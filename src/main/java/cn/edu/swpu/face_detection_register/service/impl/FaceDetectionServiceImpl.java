@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import cn.edu.swpu.face_detection_register.cons.FaceDetectionRegisterConstrant;
@@ -22,7 +23,7 @@ import com.alibaba.fastjson.TypeReference;
  * @Date: 2020/1/8
  * @Description:
  **/
-@Component
+@Service
 public class FaceDetectionServiceImpl implements IFaceDetectionService {
 
     private RestTemplate restTemplate = new RestTemplate();
@@ -79,6 +80,14 @@ public class FaceDetectionServiceImpl implements IFaceDetectionService {
         HttpEntity<FaceRequestParam> request= getHttpEntity(faceRequestParam);
         String responseVo = restTemplate.postForObject(FaceDetectionRegisterConstrant.BAIDU_DETECT_FACE,request,String.class,accessTokenVo.getAccessToken());
         return JSON.parseObject(responseVo, new TypeReference<ResponseVo<DetectFaceVo>>(){});
+    }
+
+    @Override
+    public ResponseVo<SearchFaceVo> searchFace(FaceRequestParam faceRequestParam) {
+        AccessTokenVo accessTokenVo = getAccessToken();
+        HttpEntity<FaceRequestParam> request= getHttpEntity(faceRequestParam);
+        String responseVo = restTemplate.postForObject(FaceDetectionRegisterConstrant.BAIDU_SEARCH_FACE,request,String.class,accessTokenVo.getAccessToken());
+        return JSON.parseObject(responseVo, new TypeReference<ResponseVo<SearchFaceVo>>(){});
     }
 
     public static void main(String[] args) {

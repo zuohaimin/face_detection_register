@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @ApiModel(value = "表情")
 @Getter
 @Setter
 @ToString
-public class FacePointVo {
+public class FacePointVo implements Serializable {
     private String type;
 
     private Double probability;

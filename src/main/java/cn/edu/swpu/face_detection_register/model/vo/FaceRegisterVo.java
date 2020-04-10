@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @Author: 季才
  * @Date: 2020/1/8
@@ -15,7 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FaceRegisterVo {
+public class FaceRegisterVo implements Serializable {
 
     @JsonProperty(value = "face_token")
     private String faceToken;

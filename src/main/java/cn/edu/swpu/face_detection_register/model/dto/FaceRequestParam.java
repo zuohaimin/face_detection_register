@@ -24,6 +24,9 @@ public class FaceRequestParam {
     @JsonProperty(value = "group_id")
     private String groupId;
 
+    @JsonProperty(value = "group_id_list")
+    private String groupIdList;
+
     @JsonProperty(value = "user_id")
     private String userId;
 

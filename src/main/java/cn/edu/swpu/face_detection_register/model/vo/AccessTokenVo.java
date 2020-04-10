@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @Author: 季才
  * @Date: 2020/1/8
@@ -14,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AccessTokenVo {
+public class AccessTokenVo implements Serializable {
     @JsonProperty(value = "refresh_token")
     private String refreshToken;
 

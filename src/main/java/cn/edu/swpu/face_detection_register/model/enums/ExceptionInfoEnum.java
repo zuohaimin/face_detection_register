@@ -15,7 +15,9 @@ public enum  ExceptionInfoEnum {
     FACE_FEILD_WEAR_MASK("608","戴口罩"),
     REPEAT_REGISTER("609","重复注册"),
     NOT_REGISTER("610","未注册"),
-    PARAMETER_VALID_EXCEPTION("611","参数校验异常")
+    PARAMETER_VALID_EXCEPTION("611","参数校验异常"),
+    REPEAT_USER_NAME("612","重复的用户名"),
+    FACE_MSG_NULL("613","面部信息查询为空")
     ;
     private String erroCode;
     private String erroMsg;

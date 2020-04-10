@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.swpu.face_detection_register.dao.UserInfoMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
-    <constructor>
-      <idArg column="userId" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="userName" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="faceToken" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="addTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="modifyTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="isLock" javaType="java.lang.Boolean" jdbcType="BIT" />
-      <arg column="isDelete" javaType="java.lang.Boolean" jdbcType="BIT" />
-    </constructor>
-  </resultMap>
+<!--  <resultMap id="BaseResultMap" type="cn.edu.swpu.face_detection_register.model.bo.UserInfo">-->
+<!--    <constructor>-->
+<!--      <idArg column="userId" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="userName" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="faceToken" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="addTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />-->
+<!--      <arg column="modifyTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />-->
+<!--      <arg column="isLock" javaType="java.lang.Integer" jdbcType="TINYINT" />-->
+<!--      <arg column="isDelete" javaType="java.lang.Integer" jdbcType="TINYINT" />-->
+<!--    </constructor>-->
+<!--  </resultMap>-->
   <update id="deleteByPrimaryKey" parameterType="java.lang.String">
     update userinfo
     set isDelete=1 and ModifyTime=now()
@@ -34,12 +34,12 @@
       isDelete = #{isDelete,jdbcType=BIT}
     where userId = #{userId,jdbcType=VARCHAR} and IsDelete = 0
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
     select userId, userName, faceToken, addTime, modifyTime, isLock, isDelete
     from userinfo
     where userId = #{userId,jdbcType=VARCHAR} and IsDelete = 0
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
     select userId, userName, faceToken, addTime, modifyTime, isLock, isDelete
     from userinfo
   </select>
@@ -48,6 +48,11 @@
     from userinfo
     where faceToken = #{faceToken} and isDelete = 0 and isLock = 0
 </select>
+  <select id="selectByUserName" parameterType="java.lang.String" resultType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
+    select userId, userName, faceToken, addTime, modifyTime, isLock, isDelete
+    from userinfo
+    where userName = #{userName} and isDelete = 0 and isLock = 0
+  </select>
 
 
 </mapper>

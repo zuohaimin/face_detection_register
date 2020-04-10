@@ -5,11 +5,10 @@ import cn.edu.swpu.face_detection_register.exception.SystemException;
 import cn.edu.swpu.face_detection_register.model.bo.UserInfo;
 import cn.edu.swpu.face_detection_register.model.dto.FaceRequestParam;
 import cn.edu.swpu.face_detection_register.model.dto.RegisterRequestParam;
+import cn.edu.swpu.face_detection_register.model.dto.VerifyUserNameParam;
 import cn.edu.swpu.face_detection_register.model.enums.ExceptionInfoEnum;
 import cn.edu.swpu.face_detection_register.model.enums.ImageTypeEnum;
-import cn.edu.swpu.face_detection_register.model.vo.DetectFacePartVo;
-import cn.edu.swpu.face_detection_register.model.vo.DetectFaceVo;
-import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
+import cn.edu.swpu.face_detection_register.model.vo.*;
 import cn.edu.swpu.face_detection_register.service.IFaceDetectionService;
 import cn.edu.swpu.face_detection_register.service.IPersonLoginService;
 import cn.edu.swpu.face_detection_register.util.JWTUtil;
@@ -17,9 +16,12 @@ import cn.edu.swpu.face_detection_register.util.ResponseVoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.UUID;
 
-@Component
+@Service
 public class PersonLoginServiceImpl implements IPersonLoginService {
 
     @Autowired
@@ -39,21 +41,69 @@ public class PersonLoginServiceImpl implements IPersonLoginService {
         faceRequestParam.setImageType(ImageTypeEnum.BASE64.getImageType());
         faceRequestParam.setFaceField(faceFeild);
         ResponseVo<DetectFaceVo> detectFaceVoResponseVo = faceDetectionService.detectFace(faceRequestParam);
-        if (detectFaceVoResponseVo == null || !"0".equals(detectFaceVoResponseVo.getErrorCode()) || detectFaceVoResponseVo.getResult() == null) {
+        if (detectFaceVoResponseVo == null) {
             throw new SystemException(ExceptionInfoEnum.REQUEST_INTERFACE_EXCEPTIO,false);
+        }else if (!"0".equals(detectFaceVoResponseVo.getErrorCode()) || detectFaceVoResponseVo.getResult() == null){
+            String erroMsg = detectFaceVoResponseVo.getErrorMsg() == null? ExceptionInfoEnum.REQUEST_INTERFACE_EXCEPTIO.getErroMsg():detectFaceVoResponseVo.getErrorMsg();
+            throw new SystemException(ExceptionInfoEnum.REQUEST_INTERFACE_EXCEPTIO.getErroCode(),erroMsg,false);
         }
         return detectFaceVoResponseVo;
     }
+
+    private FaceRequestParam getSearchFaceRequestParam() {
+        FaceRequestParam faceRequestParam = new FaceRequestParam();
+        faceRequestParam.setImageType(ImageTypeEnum.BASE64.getImageType());
+        faceRequestParam.setGroupIdList("201912311715");
+        faceRequestParam.setQualityControl("HIGH");
+        faceRequestParam.setLivenessControl("HIGH");
+        return faceRequestParam;
+    }
+
+    private  ResponseVo<SearchFaceVo> getSearchFaceResponseVo(String base64Image){
+        //调用查询接口，确认用户是否已经注册
+        FaceRequestParam faceRequestParam = getSearchFaceRequestParam();
+        faceRequestParam.setImage(base64Image);
+        ResponseVo<SearchFaceVo> searchFaceVoResponseVo = faceDetectionService.searchFace(faceRequestParam);
+        if (searchFaceVoResponseVo == null) {
+            throw new SystemException(ExceptionInfoEnum.REQUEST_INTERFACE_EXCEPTIO,false);
+        }
+        if (!"0".equals(searchFaceVoResponseVo.getErrorCode()) || searchFaceVoResponseVo.getResult() == null){
+            throw new SystemException(ExceptionInfoEnum.REQUEST_INTERFACE_EXCEPTIO.getErroCode(),searchFaceVoResponseVo.getErrorMsg(),false);
+        }
+        return searchFaceVoResponseVo;
+    }
     @Override
     public ResponseVo<Boolean> personRegister(RegisterRequestParam registerRequestParam) {
-        ResponseVo<DetectFaceVo> detectFaceVoResponseVo = getFaceField(registerRequestParam.getBase64Image(),null);
+        //调用查询接口，确认用户是否已经注册
+        ResponseVo<SearchFaceVo> searchFaceVoResponseVo = getSearchFaceResponseVo(registerRequestParam.getBase64Image());
+        List<UserListVo> userListVos = searchFaceVoResponseVo.getResult().getUserList();
+        if (userListVos != null && userListVos.size() != 0 && userListVos.get(0).getScore() > 80) {
+            //已经注册
+            throw new SystemException(ExceptionInfoEnum.REPEAT_REGISTER,false);
+        }
+        //调用添加用户的接口
+        String userId = UUID.randomUUID().toString().replace("-","");
+        FaceRequestParam addFaceRequestParam = new FaceRequestParam();
+        addFaceRequestParam.setImage(registerRequestParam.getBase64Image());
+        addFaceRequestParam.setImageType(ImageTypeEnum.BASE64.getImageType());
+        addFaceRequestParam.setGroupId("201912311715");
+        addFaceRequestParam.setUserId(userId);
+        addFaceRequestParam.setUserInfo(registerRequestParam.getUserName());
+        addFaceRequestParam.setQualityControl("HIGH");
+        addFaceRequestParam.setLivenessControl("HIGH");
+        addFaceRequestParam.setActionType("REPLACE");
+        ResponseVo<FaceRegisterVo> faceRegisterVoResponseVo = faceDetectionService.registerFace(addFaceRequestParam);
+        if (faceRegisterVoResponseVo == null) {
+            throw new SystemException(ExceptionInfoEnum.REQUEST_INTERFACE_EXCEPTIO,false);
+        }
+        //在用户表中插入数据
         UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(UUID.randomUUID().toString().replace("-",""));
+        userInfo.setUserId(userId);
         userInfo.setUserName(registerRequestParam.getUserName());
-        String faceToken = detectFaceVoResponseVo.getResult().getFaceList().get(0).getFaceToken();
+        String faceToken = faceRegisterVoResponseVo.getResult().getFaceToken();
         userInfo.setFaceToken(faceToken);
         //判断是否已经注册，避免重复注册
-        UserInfo userInfoSelect = userInfoMapper.selectByFaceToken(faceToken);
+        UserInfo userInfoSelect = userInfoMapper.selectByPrimaryKey(userId);
         if (userInfoSelect != null) {
             throw new SystemException(ExceptionInfoEnum.REPEAT_REGISTER,false);
         }
@@ -93,16 +143,28 @@ public class PersonLoginServiceImpl implements IPersonLoginService {
 
     @Override
     public ResponseVo<String> login(String base64Image) {
-        //获取到人脸图像对应的face_token
-        ResponseVo<DetectFaceVo> detectFaceVoResponseVo = getFaceField(base64Image, null);
-        String faceToken = detectFaceVoResponseVo.getResult().getFaceList().get(0).getFaceToken();
-        //数据库匹配对应的faceToken，获得对应的UserId
-        UserInfo userInfo = userInfoMapper.selectByFaceToken(faceToken);
+        //获取到userId
+        ResponseVo<SearchFaceVo> searchFaceResponseVo = getSearchFaceResponseVo(base64Image);
+        //查数据库
+        List<UserListVo> userListVos = searchFaceResponseVo.getResult().getUserList();
+        if (userListVos == null || userListVos.size() < 1 || userListVos.get(0).getScore() <= 80) {
+            throw new SystemException(ExceptionInfoEnum.NOT_REGISTER,null);
+        }
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userListVos.get(0).getUserId());
         if (userInfo == null) {
             throw new SystemException(ExceptionInfoEnum.NOT_REGISTER,null);
         }
         //颁发token
         String token = JWTUtil.createToken(userInfo.getUserId(), secret);
         return ResponseVoUtil.success(token);
+    }
+
+    @Override
+    public ResponseVo<Boolean> verifyUserName(VerifyUserNameParam verifyUserNameParam) {
+        List<UserInfo> userInfos = userInfoMapper.selectByUserName(verifyUserNameParam.getUserName());
+        if (userInfos != null && userInfos.size() >0) {
+            throw new SystemException(ExceptionInfoEnum.REPEAT_USER_NAME,false);
+        }
+        return ResponseVoUtil.success(true);
     }
 }

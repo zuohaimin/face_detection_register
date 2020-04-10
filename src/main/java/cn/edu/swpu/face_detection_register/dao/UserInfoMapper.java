@@ -18,5 +18,7 @@ public interface UserInfoMapper {
 
     UserInfo selectByFaceToken(String faceToken);
 
+    List<UserInfo> selectByUserName(String userName);
+
     int updateByPrimaryKey(UserInfo record);
 }

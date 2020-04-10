@@ -1,6 +1,8 @@
 package cn.edu.swpu.face_detection_register.controller;
 
+import cn.edu.swpu.face_detection_register.model.dto.Base64ImageRequestParam;
 import cn.edu.swpu.face_detection_register.model.dto.RegisterRequestParam;
+import cn.edu.swpu.face_detection_register.model.dto.VerifyUserNameParam;
 import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
 import cn.edu.swpu.face_detection_register.service.IPersonLoginService;
 import io.swagger.annotations.ApiModel;
@@ -13,6 +15,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping(value = "/anno")
 @ApiModel(value = "用户注册")
+@CrossOrigin
 public class PersonLoginController {
     @Autowired
     private IPersonLoginService personLoginService;
@@ -37,14 +40,19 @@ public class PersonLoginController {
      */
     @PostMapping(value = "/login")
     @ResponseBody
-    public ResponseVo<String> login(@RequestBody String base64Image){
-        return personLoginService.login(base64Image);
+    public ResponseVo<String> login(@RequestBody Base64ImageRequestParam base64Image){
+        return personLoginService.login(base64Image.getBase64Image());
     }
 
-    @PostMapping(value = "/verifyBase64Image")
+    @PostMapping(value = "/verifyBase64Image",produces = "application/json;charset=utf-8")
     @ResponseBody
-    public ResponseVo<Boolean> verifyBase64Image(@RequestBody String base64Image){
-        return personLoginService.verifyBase64Image(base64Image);
+    public ResponseVo<Boolean> verifyBase64Image(@RequestBody @Valid Base64ImageRequestParam base64Image){
+        return personLoginService.verifyBase64Image(base64Image.getBase64Image());
     }
 
+    @PostMapping(value = "verifyUserName")
+    @ResponseBody
+    public ResponseVo<Boolean> verifyUserName(@RequestBody @Valid VerifyUserNameParam verifyUserNameParam) {
+        return personLoginService.verifyUserName(verifyUserNameParam);
+    }
 }

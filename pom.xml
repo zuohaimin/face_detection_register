@@ -77,6 +77,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.github.abel533</groupId>
+            <artifactId>ECharts</artifactId>
+            <version>3.0.0.6</version>
+        </dependency>
+        <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
@@ -108,7 +113,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <configurationFile>src\main\resources\generator/generatorConfig.xml</configurationFile>
+                    <configurationFile>src\main\resources\mybatis\generator/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <verbose>true</verbose>
                 </configuration>

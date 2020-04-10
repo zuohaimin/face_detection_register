@@ -56,4 +56,7 @@ public interface IFaceDetectionService {
     ResponseVo<DetectFaceVo> detectFace(FaceRequestParam faceRequestParam);
 
 
+    ResponseVo<SearchFaceVo> searchFace(FaceRequestParam faceRequestParam);
+
+
 }
