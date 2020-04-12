@@ -3,9 +3,11 @@ package cn.edu.swpu.face_detection_register.model.bo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Transient;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +26,18 @@ public class UserInfo implements Serializable {
     private Integer isLock;
 
     private Integer isDelete;
+
+    @Transient
+    private Integer isFaceMsg;
+
+    @Transient
+    private List<String> userIdList;
+
+    @Transient
+    private Integer pageSize;
+
+    @Transient
+    private Integer pageIndex;
 
     public UserInfo() {
     }

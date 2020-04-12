@@ -23,6 +23,11 @@ spring:
       enabled: true
       additional-paths: src/main
       exclude: WEB-INF/**
+  mvc:
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/
 mybatis:
   mapper-locations: classpath:mybatis/mapping/*.xml
   type-aliases-package: cn.edu.swpu.face_detection_register.model.bo
+

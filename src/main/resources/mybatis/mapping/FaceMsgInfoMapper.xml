@@ -33,6 +33,28 @@
       #{addTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
       )
   </insert>
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="false">
+    insert into facemsginfo (userId, age,
+    faceShape, gender, glasses,
+    emotion, beauty, expression,
+    addTime, modifyTime, isDelete
+    )values
+    <foreach collection="list" item="item" separator=",">
+      (
+        #{item.userId},
+        #{item.age},
+        #{item.faceShape},
+        #{item.gender},
+        #{item.glasses},
+        #{item.emotion},
+        #{item.beauty},
+        #{item.expression},
+        now(),
+        now(),
+        0
+      )
+    </foreach>
+  </insert>
   <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.FaceMsgInfo">
     update facemsginfo
     set userId = #{userId,jdbcType=VARCHAR},

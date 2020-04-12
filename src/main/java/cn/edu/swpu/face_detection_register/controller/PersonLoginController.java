@@ -20,9 +20,14 @@ public class PersonLoginController {
     @Autowired
     private IPersonLoginService personLoginService;
 
-    @GetMapping(value = "/home")
+    @GetMapping(value = "/")
     public String home(){
-        return "home";
+        return "index";
+    }
+
+    @GetMapping(value = "/background")
+    public String background(){
+        return "background";
     }
 
     /**

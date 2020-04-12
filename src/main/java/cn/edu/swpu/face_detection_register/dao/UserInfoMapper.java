@@ -21,4 +21,8 @@ public interface UserInfoMapper {
     List<UserInfo> selectByUserName(String userName);
 
     int updateByPrimaryKey(UserInfo record);
+
+    List<UserInfo> selectUserInfoByCondition(UserInfo userInfo);
+
+    Integer batchUpdateIsFaceMsg(UserInfo userInfo);
 }

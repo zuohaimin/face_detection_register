@@ -52,7 +52,7 @@ let ageOption = {
     legend: {
         orient: 'vertical',
         left: 10,
-        data: ['少年', '青少年', '中年']
+        data: ["少年", "青少年", "青年","中年","中老年","老年"]
     },
     series: [{
         name:"年龄分布",

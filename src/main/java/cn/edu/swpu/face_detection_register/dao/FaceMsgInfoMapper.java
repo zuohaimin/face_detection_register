@@ -13,6 +13,8 @@ public interface FaceMsgInfoMapper {
 
     int insert(FaceMsgInfo record);
 
+    int batchInsert(List<FaceMsgInfo> faceMsgInfos);
+
     FaceMsgInfo selectByPrimaryKey(Long keyId);
 
     List<FaceMsgInfo> selectAll();

@@ -34,6 +34,13 @@
       isDelete = #{isDelete,jdbcType=BIT}
     where userId = #{userId,jdbcType=VARCHAR} and IsDelete = 0
   </update>
+  <update id="batchUpdateIsFaceMsg" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
+    update userinfo
+    set isFaceMsg = #{isFaceMsg}
+    where isDelete = 0
+    and userId = <foreach collection="userIdList" item="userId" open="(" close=")" separator=",">#{userId}</foreach>
+  </update>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
     select userId, userName, faceToken, addTime, modifyTime, isLock, isDelete
     from userinfo
@@ -52,6 +59,21 @@
     select userId, userName, faceToken, addTime, modifyTime, isLock, isDelete
     from userinfo
     where userName = #{userName} and isDelete = 0 and isLock = 0
+  </select>
+  <select id="selectUserInfoByCondition" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserInfo" resultType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
+    select userId, userName, faceToken, addTime, modifyTime, isLock, isDelete
+    from userinfo
+    where
+        isDelete = 0
+        <if test="userId != null">
+          and userId = #{userId}
+        </if>
+        <if test="isFaceMsg != null">
+          and isFaceMsg = #{isFaceMsg}
+        </if>
+    <if test="pageSize != null and pageIndex == null" >
+      limit ${pageSize}
+    </if>
   </select>
 
 

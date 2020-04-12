@@ -17,7 +17,9 @@ public enum  ExceptionInfoEnum {
     NOT_REGISTER("610","未注册"),
     PARAMETER_VALID_EXCEPTION("611","参数校验异常"),
     REPEAT_USER_NAME("612","重复的用户名"),
-    FACE_MSG_NULL("613","面部信息查询为空")
+    FACE_MSG_NULL("613","面部信息查询为空"),
+    FACE_MSG_INSETT_EXCEPTION("614","面部信息插入异常"),
+    USER_MSG_CALLBACK_EXCEPTION("615","用户信息反向更新异常")
     ;
     private String erroCode;
     private String erroMsg;

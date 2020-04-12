@@ -32,7 +32,7 @@ public class DetectFacePartVo implements Serializable {
 
     @ApiModelProperty(value = "美丑得分")
     @JsonProperty(value = "beauty")
-    private Double beauty;
+    private Integer beauty;
 
     @ApiModelProperty(value = "表情")
     @JsonProperty(value = "expression")
