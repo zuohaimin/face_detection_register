@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.swpu.face_detection_register.dao.ResourceMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.swpu.face_detection_register.model.bo.Resource">
+    <constructor>
+      <idArg column="keyId" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="className" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="classDesc" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="classURL" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="methodName" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="methodURL" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="requestType" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="batchNo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="addTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="modifyTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="isDelete" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from resource
+    where keyId = #{keyId,jdbcType=BIGINT}
+  </delete>
+
+    <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.Resource">
+    insert into resource (keyId, className, classDesc, 
+      classURL, methodName, methodURL, 
+      requestType, batchNo, addTime, 
+      modifyTime, isDelete)
+    values (#{keyId,jdbcType=BIGINT}, #{className,jdbcType=VARCHAR}, #{classDesc,jdbcType=VARCHAR}, 
+      #{classURL,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, #{methodURL,jdbcType=VARCHAR}, 
+      #{requestType,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BIT})
+  </insert>
+  <insert id="batchInsertResource">
+    insert into resource (keyId, className, classDesc,
+                          classURL, methodName, methodURL,
+                          requestType, batchNo, addTime,
+                          modifyTime, isDelete)
+    values
+    <foreach collection="list" separator="," item="item">
+        (
+            #{item.keyId,jdbcType=BIGINT},
+            #{item.className,jdbcType=VARCHAR},
+            #{item.classDesc,jdbcType=VARCHAR},
+            #{item.classURL,jdbcType=VARCHAR},
+            #{item.methodName,jdbcType=VARCHAR},
+            #{item.methodURL,jdbcType=VARCHAR},
+            #{item.requestType,jdbcType=VARCHAR},
+            #{item.batchNo,jdbcType=VARCHAR},
+            now(),
+            now(),
+            0
+        )
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.Resource">
+    update resource
+    set className = #{className,jdbcType=VARCHAR},
+      classDesc = #{classDesc,jdbcType=VARCHAR},
+      classURL = #{classURL,jdbcType=VARCHAR},
+      methodName = #{methodName,jdbcType=VARCHAR},
+      methodURL = #{methodURL,jdbcType=VARCHAR},
+      requestType = #{requestType,jdbcType=VARCHAR},
+      batchNo = #{batchNo,jdbcType=VARCHAR},
+      addTime = #{addTime,jdbcType=TIMESTAMP},
+      modifyTime = #{modifyTime,jdbcType=TIMESTAMP},
+      isDelete = #{isDelete,jdbcType=BIT}
+    where keyId = #{keyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select keyId, className, classDesc, classURL, methodName, methodURL, requestType, 
+    batchNo, addTime, modifyTime, isDelete
+    from resource
+    where keyId = #{keyId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select keyId, className, classDesc, classURL, methodName, methodURL, requestType, 
+    batchNo, addTime, modifyTime, isDelete
+    from resource
+  </select>
+    <select id="selectByResourceIds" resultType="cn.edu.swpu.face_detection_register.model.bo.Resource">
+        select keyId, className, classDesc, classURL, methodName, methodURL, requestType,
+               batchNo, addTime, modifyTime, isDelete
+        from resource
+        where isDelete = 0 and keyId in <foreach collection="list" open="(" close=")" separator="," item="resourceId">#{resourceId}</foreach>
+    </select>
+</mapper>
