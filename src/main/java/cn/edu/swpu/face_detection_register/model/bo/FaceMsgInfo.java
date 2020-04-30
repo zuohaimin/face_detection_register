@@ -31,4 +31,6 @@ public class FaceMsgInfo {
     private Date modifyTime;
 
     private Integer isDelete;
+
+
 }

@@ -2,18 +2,13 @@ package cn.edu.swpu.face_detection_register.dao;
 
 import cn.edu.swpu.face_detection_register.model.bo.FaceMsgInfo;
 import cn.edu.swpu.face_detection_register.model.vo.EchartsDataVo;
-import org.springframework.stereotype.Repository;
 
-import javax.swing.*;
 import java.util.List;
 
-@Repository
 public interface FaceMsgInfoMapper {
     int deleteByPrimaryKey(Long keyId);
 
     int insert(FaceMsgInfo record);
-
-    int batchInsert(List<FaceMsgInfo> faceMsgInfos);
 
     FaceMsgInfo selectByPrimaryKey(Long keyId);
 
@@ -28,4 +23,6 @@ public interface FaceMsgInfoMapper {
     List<EchartsDataVo> selectFaceMsgGroupByBeauty();
 
     List<EchartsDataVo> selectFaceMsgGroupByGender();
+
+    Integer batchInsert(List<FaceMsgInfo> faceMsgInfos);
 }

@@ -12,11 +12,24 @@
     delete from roleresource
     where keyId = #{keyId,jdbcType=BIGINT}
   </update>
+  <delete id="deleteByRoleId" parameterType="java.util.List">
+    delete from roleresource
+    where keyId IN <foreach collection="list" item="roleResourceId" open="(" close=")" separator=",">#{roleResourceId}</foreach>
+  </delete>
+
   <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
-    insert into roleresource (keyId, roleId, resourceId
+    insert into roleresource (roleId, resourceId
       )
-    values (#{keyId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{resourceId,jdbcType=BIGINT}
+    values (#{roleId,jdbcType=BIGINT}, #{resourceId,jdbcType=BIGINT}
       )
+  </insert>
+  <insert id="insertRoleResourceList" parameterType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
+    insert into roleresource (roleId, resourceId
+    )
+    values <foreach collection="list" separator="," item="item">
+    (#{item.roleId,jdbcType=BIGINT}, #{item.resourceId,jdbcType=BIGINT}
+    )
+  </foreach>
   </insert>
   <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
     update roleresource
@@ -32,5 +45,10 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select keyId, roleId, resourceId
     from roleresource
+  </select>
+  <select id="selectByRoleId" resultType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
+    select keyId, roleId, resourceId
+    from roleresource
+    where roleId = #{roleId}
   </select>
 </mapper>

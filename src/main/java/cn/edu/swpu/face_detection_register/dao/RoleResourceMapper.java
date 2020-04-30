@@ -11,9 +11,16 @@ public interface RoleResourceMapper {
 
     int insert(RoleResource record);
 
+    Integer insertRoleResourceList(List<RoleResource> roleResources);
+
     RoleResource selectByPrimaryKey(Long keyId);
 
     List<RoleResource> selectAll();
 
     int updateByPrimaryKey(RoleResource record);
+
+    Integer deleteByRoleId(List<Long> roleIds);
+
+    List<RoleResource> selectByRoleId(Long keyId);
+
 }

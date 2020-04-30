@@ -2,23 +2,11 @@ package cn.edu.swpu.face_detection_register.service.impl;
 
 import cn.edu.swpu.face_detection_register.dao.FaceMsgInfoMapper;
 import cn.edu.swpu.face_detection_register.exception.SystemException;
-import cn.edu.swpu.face_detection_register.model.bo.Resource;
 import cn.edu.swpu.face_detection_register.model.enums.ExceptionInfoEnum;
 import cn.edu.swpu.face_detection_register.model.vo.EchartsDataVo;
 import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
 import cn.edu.swpu.face_detection_register.service.IEchartsService;
 import cn.edu.swpu.face_detection_register.util.ResponseVoUtil;
-import com.alibaba.fastjson.JSON;
-import com.github.abel533.echarts.Label;
-import com.github.abel533.echarts.Option;
-import com.github.abel533.echarts.code.Orient;
-import com.github.abel533.echarts.code.Position;
-import com.github.abel533.echarts.code.Trigger;
-import com.github.abel533.echarts.series.Pie;
-import com.github.abel533.echarts.series.Series;
-import com.github.abel533.echarts.style.ItemStyle;
-import com.github.abel533.echarts.style.TextStyle;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

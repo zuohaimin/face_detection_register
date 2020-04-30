@@ -9,6 +9,8 @@ import java.util.List;
 public interface RoleMapper {
     int deleteByPrimaryKey(Long keyId);
 
+    Integer deleteRoleList(List<Long> roleIds);
+
     int insert(Role record);
 
     Role selectByPrimaryKey(Long keyId);
@@ -16,4 +18,8 @@ public interface RoleMapper {
     List<Role> selectAll();
 
     int updateByPrimaryKey(Role record);
+
+
+    List<Role> selectByRoleIds(List<Long> roleIds);
+
 }

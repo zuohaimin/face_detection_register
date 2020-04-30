@@ -19,7 +19,9 @@ public enum  ExceptionInfoEnum {
     REPEAT_USER_NAME("612","重复的用户名"),
     FACE_MSG_NULL("613","面部信息查询为空"),
     FACE_MSG_INSETT_EXCEPTION("614","面部信息插入异常"),
-    USER_MSG_CALLBACK_EXCEPTION("615","用户信息反向更新异常")
+    USER_MSG_CALLBACK_EXCEPTION("615","用户信息反向更新异常"),
+    SCAN_URL_RESOURCE_EXCEPTION("616","扫描全局资源信息异常"),
+    ROLE_RESOURCE_MAPPING_DEAL_EXCEPTION("617","角色资源映射处理异常")
     ;
     private String erroCode;
     private String erroMsg;

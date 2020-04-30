@@ -15,18 +15,24 @@
     set isDelete = 1 and modifyTime = now()
     where keyId = #{keyId,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.Role">
-    insert into role (keyId, roleName, addTime, 
+  <update id="deleteRoleList" parameterType="java.util.List">
+    update role
+    set isDelete = 1 and modifyTime = now()
+    where keyId IN <foreach collection="list" open="(" close=")" separator="," item="roleId">#{roleId}</foreach>
+  </update>
+  <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.Role" useGeneratedKeys="true" keyProperty="keyId">
+    insert into role (roleName, addTime,
       modifyTime, isDelete)
-    values (#{keyId,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, now(),
+    values (#{roleName,jdbcType=VARCHAR}, now(),
       now(), 0)
   </insert>
   <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.Role">
     update role
-    set roleName = #{roleName,jdbcType=VARCHAR},
-      addTime = #{addTime,jdbcType=TIMESTAMP},
-      modifyTime = #{modifyTime,jdbcType=TIMESTAMP},
-      isDelete = #{isDelete,jdbcType=BIT}
+    <set>
+        <if test="roleName != null">roleName = #{roleName,jdbcType=VARCHAR},</if>
+        <if test="isDelete != null"> isDelete = #{isDelete,jdbcType=BIT},</if>
+        modifyTime = now()
+    </set>
     where keyId = #{keyId,jdbcType=BIGINT} and IsDelete=0
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -37,5 +43,10 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select keyId, roleName, addTime, modifyTime, isDelete
     from role
+  </select>
+  <select id="selectByRoleIds" resultType="cn.edu.swpu.face_detection_register.model.bo.Role">
+    select keyId, roleName, addTime, modifyTime, isDelete
+    from role
+    where isDelete = 0 and keyId IN  <foreach collection="list" item="roleId" separator="," open="(" close=")">#{roleId}</foreach>
   </select>
 </mapper>

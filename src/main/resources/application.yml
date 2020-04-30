@@ -31,3 +31,7 @@ mybatis:
   mapper-locations: classpath:mybatis/mapping/*.xml
   type-aliases-package: cn.edu.swpu.face_detection_register.model.bo
 
+application:
+  urlResource:
+    isScan: true
+
