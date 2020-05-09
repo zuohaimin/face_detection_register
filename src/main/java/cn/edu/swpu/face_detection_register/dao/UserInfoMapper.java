@@ -1,6 +1,9 @@
 package cn.edu.swpu.face_detection_register.dao;
 
 import cn.edu.swpu.face_detection_register.model.bo.UserInfo;
+import cn.edu.swpu.face_detection_register.model.dto.VerifyUserNameParam;
+import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
+import cn.edu.swpu.face_detection_register.model.vo.UserSelectVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +28,6 @@ public interface UserInfoMapper {
     List<UserInfo> selectUserInfoByCondition(UserInfo userInfo);
 
     Integer batchUpdateIsFaceMsg(UserInfo userInfo);
+
+    List<UserSelectVo> selectUserList(VerifyUserNameParam verifyUserNameParam);
 }

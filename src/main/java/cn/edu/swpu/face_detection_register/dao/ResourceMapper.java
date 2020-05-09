@@ -23,4 +23,5 @@ public interface ResourceMapper {
 
     List<Resource> selectByResourceIds(List<Long> resourceIds);
 
+    List<Resource> selectResourceByMethodNameList(List<String> methodNameList);
 }

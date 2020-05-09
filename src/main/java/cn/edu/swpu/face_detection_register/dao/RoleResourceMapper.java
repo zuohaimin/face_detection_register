@@ -3,6 +3,7 @@ package cn.edu.swpu.face_detection_register.dao;
 import cn.edu.swpu.face_detection_register.model.bo.RoleResource;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,4 +24,5 @@ public interface RoleResourceMapper {
 
     List<RoleResource> selectByRoleId(Long keyId);
 
+    List<RoleResource> selectByRoleIdList(List<Long> roleIdList);
 }

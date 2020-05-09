@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+}
+.header,.center,.footer,.slider,.content{
+    border-style: solid;
+    border-color: #428bca;
+    height: 100px;
+}
+
+.header{
+    width: 100%;
+}
+.slider{
+    width: 19.5%;
+    margin: 0;
+    padding: 0;
+    border-width: 1px;
+    float: left;
+}
+.content{
+    width: 80%;
+    margin: 0;
+    padding: 0;
+    border-width: 1px;
+    float: right;
+}
+
+.footer{
+    width: 100%;
+    padding: 15px;
+}

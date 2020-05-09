@@ -1,6 +1,7 @@
 package cn.edu.swpu.face_detection_register.dao;
 
 import cn.edu.swpu.face_detection_register.model.bo.Role;
+import cn.edu.swpu.face_detection_register.model.dto.VerifyRoleNameParam;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,5 +22,11 @@ public interface RoleMapper {
 
 
     List<Role> selectByRoleIds(List<Long> roleIds);
+
+    List<Role> selectRoleByCondition(VerifyRoleNameParam verifyRoleNameParam);
+
+    List<Role> selectRoleByLikeRoleName(VerifyRoleNameParam verifyRoleNameParam);
+
+    Integer updateByRoleName(Role role);
 
 }

@@ -1,5 +1,5 @@
-let myChart;
-let faceShapeOption = {
+// let myEChart;
+var faceShapeOption = {
     backgroundColor: '#2c343c',
     tooltip: {
         trigger: 'item',
@@ -44,7 +44,7 @@ let faceShapeOption = {
         }
     ]
 };
-let ageOption = {
+var ageOption = {
     tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -73,7 +73,7 @@ let ageOption = {
     }]
 };
 
-let faceValueOption =  {
+var faceValueOption =  {
     tooltip: {
         trigger:"axis",
 
@@ -94,7 +94,7 @@ let faceValueOption =  {
     }]
 };
 
-let sexRadioOption =   {
+var sexRadioOption =   {
     tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c}人 ({d}%)'
@@ -127,47 +127,55 @@ let sexRadioOption =   {
 };
 
 $(function () {
-    myChart = echarts.init(document.getElementById("echarts_canvas"));
+    myEChart = echarts.init(document.getElementById("echarts_canvas"));
     $("#ageDistributePie").click();
 });
 
 $("#ageDistributePie").click(function () {
+    $("#e_chart").show();
+    $("#background_control").hide();
    //设置图片数据
     $.getJSON("http://localhost:8080/background/ageDistributePie",function (data) {
         ageOption.series[0].data = data.result;
-        myChart.clear();
-        myChart.setOption(ageOption);
+        myEChart.clear();
+        myEChart.setOption(ageOption);
     });
    $("#charts_title").text("年龄分布图");
 });
 
 $("#faceShapePie").click(function () {
+    $("#e_chart").show();
+    $("#background_control").hide();
     //设置图片数据
     $.getJSON("http://localhost:8080/background/faceShapePie",function (data) {
         faceShapeOption.series[0].data = data.result;
-        myChart.clear();
-        myChart.setOption(faceShapeOption);
+        myEChart.clear();
+        myEChart.setOption(faceShapeOption);
     });
     $("#charts_title").text("脸型比例图");
 });
 
 $("#faceValueLine").click(function () {
+    $("#e_chart").show();
+    $("#background_control").hide();
     //设置图片数据
     $.getJSON("http://localhost:8080/background/faceValueLine",function (data) {
         faceValueOption.series[0].data = data.result;
-        myChart.clear();
-        myChart.setOption(faceValueOption);
+        myEChart.clear();
+        myEChart.setOption(faceValueOption);
     });
 
     $("#charts_title").text("颜值曲线图");
 });
 
 $("#sexRadioChart").click(function () {
+    $("#e_chart").show();
+    $("#background_control").hide();
     //设置图片数据
     $.getJSON("http://localhost:8080/background/sexRadioChart",function (data) {
         sexRadioOption.series[0].data = data.result;
-        myChart.clear();
-        myChart.setOption(sexRadioOption);
+        myEChart.clear();
+        myEChart.setOption(sexRadioOption);
     });
     $("#charts_title").text("性别比例图");
 });

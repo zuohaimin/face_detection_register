@@ -17,6 +17,7 @@ public class ControllerAdvicer {
         responseVo.setErrorMsg(systemException.getErroMsg());
         responseVo.setTimestamp(System.currentTimeMillis());
         responseVo.setResult(systemException.getData());
+        systemException.printStackTrace();
         return responseVo;
     }
 
@@ -27,6 +28,7 @@ public class ControllerAdvicer {
         responseVo.setErrorMsg(validException.getBindingResult().getFieldError().getDefaultMessage());
         responseVo.setTimestamp(System.currentTimeMillis());
         responseVo.setResult(null);
+        validException.printStackTrace();
         return responseVo;
     }
 }

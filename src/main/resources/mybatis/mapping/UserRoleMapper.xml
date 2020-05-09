@@ -12,13 +12,37 @@
     delete from userrole
     where keyId = #{keyId,jdbcType=BIGINT}
   </delete>
+  <delete id="deleteByCondition" parameterType="cn.edu.swpu.face_detection_register.model.dto.UserRoleParam">
+    delete from userrole
+    <where>
+      <if test="userId != null">
+        userId = #{userId}
+      </if>
+      <if test="roleIds != null and roleIds.size() > 0">
+        and keyId in
+          <foreach collection="roleIds" item="roleId" separator="," open="(" close=")">
+              #{roleId}
+          </foreach>
+      </if>
+    </where>
+  </delete>
   <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserRole">
     insert into userrole (keyId, userId, roleId
       )
     values (#{keyId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=BIGINT}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserRole">
+    <insert id="insertUserRoleList"  parameterType="cn.edu.swpu.face_detection_register.model.bo.UserRole">
+      insert into userrole (userId, roleId
+      )
+      values <foreach collection="list" separator="," item="item">
+      (
+         #{item.userId,jdbcType=VARCHAR},
+         #{item.roleId,jdbcType=BIGINT}
+      )
+    </foreach>
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserRole">
     update userrole
     set userId = #{userId,jdbcType=VARCHAR},
       roleId = #{roleId,jdbcType=BIGINT}
@@ -32,5 +56,10 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select keyId, userId, roleId
     from userrole
+  </select>
+  <select id="selectByUserId" resultType="cn.edu.swpu.face_detection_register.model.bo.UserRole" parameterType="java.lang.String">
+    select keyId, userId, roleId
+    from userrole
+    where userId = #{userId}
   </select>
 </mapper>

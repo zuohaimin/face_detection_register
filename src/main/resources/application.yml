@@ -1,3 +1,4 @@
+
 server:
   port: 8080
 
@@ -23,15 +24,34 @@ spring:
       enabled: true
       additional-paths: src/main
       exclude: WEB-INF/**
-  mvc:
-    static-path-pattern: /static/**
-  resources:
-    static-locations: classpath:/static/
+  application:
+    name: face_detection_register
+  boot:
+    admin:
+      client:
+        url: http://localhost:8567
+        enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+#  mvc:
+#    static-path-pattern: /static/**
+#  resources:
+#    static-locations: classpath:/static/
 mybatis:
   mapper-locations: classpath:mybatis/mapping/*.xml
   type-aliases-package: cn.edu.swpu.face_detection_register.model.bo
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 application:
   urlResource:
     isScan: true
+
+
 

@@ -21,7 +21,17 @@ public enum  ExceptionInfoEnum {
     FACE_MSG_INSETT_EXCEPTION("614","面部信息插入异常"),
     USER_MSG_CALLBACK_EXCEPTION("615","用户信息反向更新异常"),
     SCAN_URL_RESOURCE_EXCEPTION("616","扫描全局资源信息异常"),
-    ROLE_RESOURCE_MAPPING_DEAL_EXCEPTION("617","角色资源映射处理异常")
+    ROLE_RESOURCE_MAPPING_DEAL_EXCEPTION("617","角色资源映射处理异常"),
+    USERINFO_ROLE_MAPPING_DEAL_EXCEPTION("618","用户角色映射处理异常"),
+    USER_SELECT_NULL("619","用户查询为空"),
+    USER_HAS_NO_ROLE("620","用户为未关联角色"),
+    ROLE_NAME_DUPLICATE("621","角色名重复"),
+    ROLE_NAME_NULL("622","角色名为空"),
+    ROLE_SELECT_NULL("623","无相匹配的角色"),
+    TOKEN_GET_ERROR("624","未获取到token"),
+    SYSTEM_EXCEPTION("625","系统异常"),
+    NOT_PERMSSION("403","没有对应权限"),
+    SELECT_METHOD_NAME_MAPPING_RESOURCE_EXCEPTION("626","查询请求方法名对应资源异常")
     ;
     private String erroCode;
     private String erroMsg;

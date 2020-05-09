@@ -20,16 +20,6 @@ public class PersonLoginController {
     @Autowired
     private IPersonLoginService personLoginService;
 
-    @GetMapping(value = "/")
-    public String home(){
-        return "index";
-    }
-
-    @GetMapping(value = "/background")
-    public String background(){
-        return "background";
-    }
-
     /**
      * 用户注册
      * @param registerRequestParam

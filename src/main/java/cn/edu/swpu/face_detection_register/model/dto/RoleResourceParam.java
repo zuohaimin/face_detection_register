@@ -12,4 +12,5 @@ public class RoleResourceParam {
 
     private Role role;
     private List<Long> resourceId;
+    private List<String> methodNameList;
 }

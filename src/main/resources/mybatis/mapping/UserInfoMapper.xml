@@ -75,6 +75,14 @@
       limit ${pageSize}
     </if>
   </select>
+    <select id="selectUserList" parameterType="cn.edu.swpu.face_detection_register.model.dto.VerifyUserNameParam" resultType="cn.edu.swpu.face_detection_register.model.vo.UserSelectVo">
+      select userId, userName
+      from userinfo
+      where isDelete = 0
+      <if test="userName != null and userName != '' ">
+        and userName like concat(#{userName},'%')
+      </if>
+    </select>
 
 
 </mapper>

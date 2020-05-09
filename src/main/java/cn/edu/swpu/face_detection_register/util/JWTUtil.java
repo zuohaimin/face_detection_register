@@ -5,8 +5,10 @@ import cn.edu.swpu.face_detection_register.model.enums.ExceptionInfoEnum;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.expression.spel.ast.NullLiteral;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -40,5 +42,15 @@ public class JWTUtil {
            throw new SystemException(ExceptionInfoEnum.TOKEN_NOT_VALID,null);
         }
         return decodedJWT.getClaim("userId").toString();
+    }
+
+    public static String getUserId(String token){
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("userId").asString();
+        } catch (JWTDecodeException e) {
+           e.printStackTrace();
+           throw new SystemException(ExceptionInfoEnum.TOKEN_NOT_VALID, null);
+        }
     }
 }

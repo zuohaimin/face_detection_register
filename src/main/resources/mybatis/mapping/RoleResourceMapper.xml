@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.swpu.face_detection_register.dao.RoleResourceMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
-    <constructor>
-      <idArg column="keyId" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="roleId" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="resourceId" javaType="java.lang.Long" jdbcType="BIGINT" />
-    </constructor>
-  </resultMap>
   <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from roleresource
     where keyId = #{keyId,jdbcType=BIGINT}
   </update>
   <delete id="deleteByRoleId" parameterType="java.util.List">
     delete from roleresource
-    where keyId IN <foreach collection="list" item="roleResourceId" open="(" close=")" separator=",">#{roleResourceId}</foreach>
+    where roleId IN <foreach collection="list" item="roleId" open="(" close=")" separator=",">#{roleId}</foreach>
   </delete>
 
   <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
@@ -37,12 +30,12 @@
       resourceId = #{resourceId,jdbcType=BIGINT}
     where keyId = #{keyId,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
     select keyId, roleId, resourceId
     from roleresource
     where keyId = #{keyId,jdbcType=BIGINT}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
     select keyId, roleId, resourceId
     from roleresource
   </select>
@@ -51,4 +44,9 @@
     from roleresource
     where roleId = #{roleId}
   </select>
+    <select id="selectByRoleIdList" resultType="cn.edu.swpu.face_detection_register.model.bo.RoleResource">
+      select keyId, roleId, resourceId
+      from roleresource
+      where roleId IN <foreach collection="list" separator="," open="(" close=")" item="roleId">#{roleId}</foreach>
+    </select>
 </mapper>

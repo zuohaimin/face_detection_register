@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.swpu.face_detection_register.dao.ResourceMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.swpu.face_detection_register.model.bo.Resource">
-    <constructor>
-      <idArg column="keyId" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="className" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="classDesc" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="classURL" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="methodName" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="methodURL" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="requestType" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="batchNo" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="addTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="modifyTime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="isDelete" javaType="java.lang.Boolean" jdbcType="BIT" />
-    </constructor>
-  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from resource
     where keyId = #{keyId,jdbcType=BIGINT}
@@ -67,21 +52,28 @@
       isDelete = #{isDelete,jdbcType=BIT}
     where keyId = #{keyId,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="cn.edu.swpu.face_detection_register.model.bo.Resource">
     select keyId, className, classDesc, classURL, methodName, methodURL, requestType, 
     batchNo, addTime, modifyTime, isDelete
     from resource
     where keyId = #{keyId,jdbcType=BIGINT}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultType="cn.edu.swpu.face_detection_register.model.bo.Resource">
     select keyId, className, classDesc, classURL, methodName, methodURL, requestType, 
     batchNo, addTime, modifyTime, isDelete
     from resource
+    where isDelete = 0
   </select>
     <select id="selectByResourceIds" resultType="cn.edu.swpu.face_detection_register.model.bo.Resource">
         select keyId, className, classDesc, classURL, methodName, methodURL, requestType,
                batchNo, addTime, modifyTime, isDelete
         from resource
         where isDelete = 0 and keyId in <foreach collection="list" open="(" close=")" separator="," item="resourceId">#{resourceId}</foreach>
+    </select>
+    <select id="selectResourceByMethodNameList" resultType="cn.edu.swpu.face_detection_register.model.bo.Resource">
+        select keyId, className, classDesc, classURL, methodName, methodURL, requestType,
+               batchNo, addTime, modifyTime, isDelete
+        from resource
+        where isDelete = 0 and methodName IN <foreach collection="list" open="(" close=")" separator="," item="methodName">#{methodName}</foreach>
     </select>
 </mapper>
