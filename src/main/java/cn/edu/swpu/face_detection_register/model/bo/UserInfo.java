@@ -27,6 +27,8 @@ public class UserInfo implements Serializable {
 
     private Integer isDelete;
 
+    private String base64Image;
+
     @Transient
     private Integer isFaceMsg;
 

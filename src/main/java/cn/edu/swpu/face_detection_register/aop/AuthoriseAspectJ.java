@@ -7,14 +7,17 @@ import cn.edu.swpu.face_detection_register.exception.SystemException;
 import cn.edu.swpu.face_detection_register.model.bo.Resource;
 import cn.edu.swpu.face_detection_register.model.bo.RoleResource;
 import cn.edu.swpu.face_detection_register.model.bo.UserRole;
+import cn.edu.swpu.face_detection_register.model.dto.ExcutionResultUtil;
+import cn.edu.swpu.face_detection_register.model.dto.RegisterRequestParam;
 import cn.edu.swpu.face_detection_register.model.enums.ExceptionInfoEnum;
+import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
 import cn.edu.swpu.face_detection_register.service.IFaceMsgScheduleService;
+import cn.edu.swpu.face_detection_register.service.Pretreat;
 import cn.edu.swpu.face_detection_register.util.JWTUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,8 +41,12 @@ public class AuthoriseAspectJ {
     @Autowired
     private ResourceMapper resourceMapper;
 
+    @Autowired
+    private Pretreat pretreat;
+
     @Pointcut("execution(public * cn.edu.swpu.face_detection_register.controller.*.*(..)) && !execution(public * cn.edu.swpu.face_detection_register.controller.PersonLoginController.*(..)) && !execution(public * cn.edu.swpu.face_detection_register.controller.ThymeleafController.*(..))")
     public void pointCut(){}
+
 
     @Before(value = "pointCut()")
     public void before(JoinPoint joinPoint) {
@@ -57,7 +64,7 @@ public class AuthoriseAspectJ {
 
 
         //查找方法对应资源Id
-        String methodName = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
         List<String> methodNameList = new ArrayList<>();
         methodNameList.add(methodName);
         List<Resource> resourceList = resourceMapper.selectResourceByMethodNameList(methodNameList);
@@ -81,13 +88,34 @@ public class AuthoriseAspectJ {
             throw new SystemException(ExceptionInfoEnum.USER_HAS_NO_ROLE,null);
         }
         Set<Long> roleIdSet = new HashSet<>();
-        userRoles.forEach(o->roleIdSet.add(o.getKeyId()));
+        userRoles.forEach(o->roleIdSet.add(o.getRoleId()));
         List<RoleResource> roleResourceList = roleResourceMapper.selectByRoleIdList(new ArrayList<>(roleIdSet));
         if (roleResourceList == null || roleResourceList.size() < 1) {
             log.info("【获取用户权限】 查询角色资源映射表异常！");
             throw new SystemException(ExceptionInfoEnum.ROLE_RESOURCE_MAPPING_DEAL_EXCEPTION,null);
         }
-        roleResourceList.forEach(o->resourceIdSet.add(o.getKeyId()));
+        roleResourceList.forEach(o->resourceIdSet.add(o.getResourceId()));
         return resourceIdSet;
+    }
+
+    /**
+     * 对注册接口切面，对注册人脸进行人脸信息预处理
+     */
+    @AfterReturning(value = "execution(public *  cn.edu.swpu.face_detection_register.controller.PersonLoginController.register(*))",returning = "result")
+    public void grayScaleFace(JoinPoint joinPoint,ResponseVo<Boolean> result){
+       //对注册人脸进行预处理
+        //排除注册失败的情况
+       if (result == null || !"0".equals(result.getErrorCode())) {
+           return;
+       }
+        //获得请求参数
+        Object[] args = joinPoint.getArgs();
+        RegisterRequestParam registerRequestParam = (RegisterRequestParam)args[0];
+        ExcutionResultUtil excutionResultUtil = pretreat.pretreatImg(registerRequestParam.getBase64Image(), registerRequestParam.getUserName());
+        if (!excutionResultUtil.isSuccess()){
+            log.error(excutionResultUtil.getMsg());
+            throw new SystemException(ExceptionInfoEnum.FACE_PRTREAT_EXCEPTION,null);
+        }
+        log.info(JSON.toJSONString(excutionResultUtil));
     }
 }

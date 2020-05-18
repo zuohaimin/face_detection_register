@@ -20,9 +20,9 @@
   <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
     insert into userinfo (userId, userName, faceToken, 
       addTime, modifyTime, isLock, 
-      isDelete)
+      isDelete,base64Image)
     values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{faceToken,jdbcType=VARCHAR}, 
-      now(), now(), 0,0)
+      now(), now(), 0,0,#{base64Image})
   </insert>
   <update id="updateByPrimaryKey" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserInfo">
     update userinfo

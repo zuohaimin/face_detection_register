@@ -45,7 +45,7 @@ public class UrlResourceSchedule {
     private List<Map<String, String>> getAllURL() {
         List<Map<String, String>> resultList = new ArrayList<>();
 
-        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
+        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext.getBean("requestMappingHandlerMapping",RequestMappingHandlerMapping.class);
         // 获取url与类和方法的对应信息
         Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 

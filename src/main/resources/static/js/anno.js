@@ -199,6 +199,7 @@ $("#login").click(function () {
                 $("#base64Image").empty();
                 localStorage.setItem("face_detection_token",data.result);
                 $("#dashboard").text("登陆成功");
+                window.location.href = "http://localhost:8080/home";
                 console.log(data.result);
             } else {
                 //将错误信息写到看板
@@ -245,4 +246,5 @@ $("#snap").click(function () {
     let ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, 500, 500);
 });
+
 

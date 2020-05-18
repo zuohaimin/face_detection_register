@@ -102,6 +102,7 @@ public class PersonLoginServiceImpl implements IPersonLoginService {
         userInfo.setUserName(registerRequestParam.getUserName());
         String faceToken = faceRegisterVoResponseVo.getResult().getFaceToken();
         userInfo.setFaceToken(faceToken);
+        userInfo.setBase64Image(registerRequestParam.getBase64Image());
         //判断是否已经注册，避免重复注册
         UserInfo userInfoSelect = userInfoMapper.selectByPrimaryKey(userId);
         if (userInfoSelect != null) {

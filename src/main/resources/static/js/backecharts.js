@@ -125,9 +125,13 @@ var sexRadioOption =   {
         }
     ]
 };
+var login_token;
+var baseUrl = "http://localhost:8080";
+var urlList = initUrlList();
 
 $(function () {
     myEChart = echarts.init(document.getElementById("echarts_canvas"));
+    login_token = window.localStorage.getItem("face_detection_token");
     $("#ageDistributePie").click();
 });
 
@@ -135,11 +139,30 @@ $("#ageDistributePie").click(function () {
     $("#e_chart").show();
     $("#background_control").hide();
    //设置图片数据
-    $.getJSON("http://localhost:8080/background/ageDistributePie",function (data) {
-        ageOption.series[0].data = data.result;
-        myEChart.clear();
-        myEChart.setOption(ageOption);
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
+        url: urlList[0],
+        success: function (data) {
+            if (data.error_code == 0) {
+                ageOption.series[0].data = data.result;
+                myEChart.clear();
+                myEChart.setOption(ageOption);
+            } else {
+                alert(data.error_msg);
+                window.location.href = baseUrl;
+            }
+
+        }
     });
+    // $.getJSON("http://localhost:8080/background/ageDistributePie",function (data) {
+    //     ageOption.series[0].data = data.result;
+    //     myEChart.clear();
+    //     myEChart.setOption(ageOption);
+    // });
    $("#charts_title").text("年龄分布图");
 });
 
@@ -147,11 +170,30 @@ $("#faceShapePie").click(function () {
     $("#e_chart").show();
     $("#background_control").hide();
     //设置图片数据
-    $.getJSON("http://localhost:8080/background/faceShapePie",function (data) {
-        faceShapeOption.series[0].data = data.result;
-        myEChart.clear();
-        myEChart.setOption(faceShapeOption);
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
+        url: urlList[1],
+        success: function (data) {
+            if (data.error_code == 0) {
+                faceShapeOption.series[0].data = data.result;
+                myEChart.clear();
+                myEChart.setOption(faceShapeOption);
+            } else {
+                alert(data.error_msg);
+                window.location.href = baseUrl;
+            }
+
+        }
     });
+    // $.getJSON("http://localhost:8080/background/faceShapePie",function (data) {
+    //     faceShapeOption.series[0].data = data.result;
+    //     myEChart.clear();
+    //     myEChart.setOption(faceShapeOption);
+    // });
     $("#charts_title").text("脸型比例图");
 });
 
@@ -159,24 +201,72 @@ $("#faceValueLine").click(function () {
     $("#e_chart").show();
     $("#background_control").hide();
     //设置图片数据
-    $.getJSON("http://localhost:8080/background/faceValueLine",function (data) {
-        faceValueOption.series[0].data = data.result;
-        myEChart.clear();
-        myEChart.setOption(faceValueOption);
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
+        url: urlList[2],
+        success: function (data) {
+            if (data.error_code == 0) {
+                faceValueOption.series[0].data = data.result;
+                myEChart.clear();
+                myEChart.setOption(faceValueOption);
+            } else {
+                alert(data.error_msg);
+                window.location.href = baseUrl;
+            }
+
+        }
     });
+    // $.getJSON("http://localhost:8080/background/faceValueLine",function (data) {
+    //     faceValueOption.series[0].data = data.result;
+    //     myEChart.clear();
+    //     myEChart.setOption(faceValueOption);
+    // });
 
     $("#charts_title").text("颜值曲线图");
 });
+
 
 $("#sexRadioChart").click(function () {
     $("#e_chart").show();
     $("#background_control").hide();
     //设置图片数据
-    $.getJSON("http://localhost:8080/background/sexRadioChart",function (data) {
-        sexRadioOption.series[0].data = data.result;
-        myEChart.clear();
-        myEChart.setOption(sexRadioOption);
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
+        url: urlList[3],
+        success: function (data) {
+            if (data.error_code == 0) {
+                sexRadioOption.series[0].data = data.result;
+                myEChart.clear();
+                myEChart.setOption(sexRadioOption);
+            } else {
+                alert(data.error_msg);
+                window.location.href = baseUrl;
+            }
+
+        }
     });
+    // $.getJSON("http://localhost:8080/background/sexRadioChart",function (data) {
+    //     sexRadioOption.series[0].data = data.result;
+    //     myEChart.clear();
+    //     myEChart.setOption(sexRadioOption);
+    // });
     $("#charts_title").text("性别比例图");
 });
 
+function initUrlList() {
+    var urlList = [];
+    let path = ["/background/ageDistributePie","/background/faceShapePie","/background/faceValueLine","/background/sexRadioChart"];
+    for(let i = 0; i < path.length; i++) {
+        urlList[i] = baseUrl + path[i];
+    }
+    return urlList;
+
+}

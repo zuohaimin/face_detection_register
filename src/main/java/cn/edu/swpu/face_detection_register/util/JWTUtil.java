@@ -20,7 +20,7 @@ public class JWTUtil {
 
     public static String  createToken(String userId,String secret) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expireTime = now.plusMinutes(5);
+        LocalDateTime expireTime = now.plusMinutes(30);
         // header Map
         Map<String, Object> map = new HashMap<>();
         map.put("alg", "HS256");

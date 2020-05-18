@@ -24,9 +24,13 @@ $("#search").click(function () {
     var data = {
         "userName":userName
     };
+    var urlList = initUrlList(urlList);
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/userRole/selectUsers",
+        url: urlList[0],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function (data) {
@@ -58,14 +62,18 @@ $("#user-search-result").click(function () {
     //查询系统全部的角色，配置当前用户角色
     var data = {"userId": $("#element_id").text()};
     var result = [];
+    var urlList = initUrlList(urlList);
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/selectAllRole",
+        url: urlList[1],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         async : false,
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function (userRoleResult) {
-            if (userRoleResult.error_code === 0) {
+            if (userRoleResult.error_code == 0) {
                 //组装数据
                 for (var i=0;i<=userRoleResult.result.length;i++) {
                     var role = userRoleResult.result[i];
@@ -98,9 +106,14 @@ $("#user-search-result").click(function () {
                     "roleIds": data,
                     "userId": $("#element_id").text()
                 };
+                var urlList = initUrlList(urlList);
+
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:8080/userRole/updateUserRole",
+                    url: urlList[2],
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("Authorization", login_token);
+                    },
                     contentType: "application/json",
                     data: JSON.stringify(param),
                     success: function (result) {
@@ -118,9 +131,14 @@ $("#user-search-result").click(function () {
 
 $("#role_add").click(function () {
     //请求资源数据并去除转义
+    var urlList = initUrlList(urlList);
+
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/selectAllResource",
+        url: urlList[3],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         async : false,
         success: function (result) {
@@ -148,9 +166,14 @@ $("#roleName").change(function () {
     }
     var param = {"roleName": roleName};
     //判重
+    var urlList = initUrlList(urlList);
+
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/verifyRoleName",
+        url: urlList[4],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         data: JSON.stringify(param),
         success: function (result) {
@@ -176,9 +199,14 @@ $("#role_add_btn").click(function () {
     var methodNameList = $(".filter-option-inner-inner").text().split(",");
     var roleName = $("#roleName").val();
     var param = {"methodNameList":methodNameList,"role":{"roleName":roleName}};
+    var urlList = initUrlList(urlList);
+
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/addRole",
+        url: urlList[5],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         data: JSON.stringify(param),
         success: function (result) {
@@ -200,9 +228,14 @@ $("#role_manage").click(function () {
 });
 $("#search_resource").click(function () {
     var param = {"roleName": $("#role_name").val()};
+    var urlList = initUrlList(urlList);
+
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/selectRoleByLikeRoleName",
+        url: urlList[6],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         data: JSON.stringify(param),
         success: function (result) {
@@ -234,18 +267,27 @@ $("#manage_resource").click(function () {
     //请求data数据
     var transferData;
     var transferGroupData;
+    var urlList = initUrlList(urlList);
+
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/selectAllResource2TransferGroupData",
+        url: urlList[7],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         async : false,
         success: function (result) {
             transferGroupData = result.result;
         }
     });
+
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/selectAllResource2TansferData",
+        url: urlList[8],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         async : false,
         success: function (result) {
@@ -265,9 +307,14 @@ $("#manage_resource").click(function () {
             console.log("Selected ID：" + data);
             //回调更新接口（直接删除原有的，添加现有的）
             var param = {"resourceId":data,"role":{"roleName": $("#role_msg").val()}};
+            var urlList = initUrlList(urlList);
+
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/role/updateRole",
+                url: urlList[9],
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", login_token);
+                },
                 contentType: "application/json",
                 data:JSON.stringify(param),
                 success: function (result) {
@@ -293,9 +340,14 @@ $("#delete_role").click(function () {
     var param = [];
     param[0] = roleName;
     //调用删除角色方法
+    var urlList = initUrlList(urlList);
+
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/role/deleteRole",
+        url: urlList[10],
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
         contentType: "application/json",
         data:JSON.stringify(param),
         success: function (result) {
@@ -307,3 +359,13 @@ $("#delete_role").click(function () {
         }
     });
 });
+// var login_token = window.localStorage.getItem("face_detection_token");
+// var baseUrl = "http://localhost:8080";
+function initUrlList() {
+    var urlList = [];
+    let requestPath = ["/userRole/selectUsers","/role/selectAllRole","/userRole/updateUserRole","/role/selectAllResource","/role/verifyRoleName","/role/addRole","/role/selectRoleByLikeRoleName","/role/selectAllResource2TransferGroupData","/role/selectAllResource2TansferData","/role/updateRole","/role/deleteRole"];
+    for(let i = 0; i < requestPath.length; i++) {
+        urlList[i] = baseUrl + requestPath[i];
+    }
+    return urlList;
+}

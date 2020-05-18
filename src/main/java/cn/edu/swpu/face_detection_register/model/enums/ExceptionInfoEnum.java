@@ -31,7 +31,8 @@ public enum  ExceptionInfoEnum {
     TOKEN_GET_ERROR("624","未获取到token"),
     SYSTEM_EXCEPTION("625","系统异常"),
     NOT_PERMSSION("403","没有对应权限"),
-    SELECT_METHOD_NAME_MAPPING_RESOURCE_EXCEPTION("626","查询请求方法名对应资源异常")
+    SELECT_METHOD_NAME_MAPPING_RESOURCE_EXCEPTION("626","查询请求方法名对应资源异常"),
+    FACE_PRTREAT_EXCEPTION("627","人脸信息预处理异常")
     ;
     private String erroCode;
     private String erroMsg;

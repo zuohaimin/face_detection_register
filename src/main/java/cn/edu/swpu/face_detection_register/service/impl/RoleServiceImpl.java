@@ -101,10 +101,10 @@ public class RoleServiceImpl implements IRoleService {
         //插入这次新增的角色映射信息
         List<Long> roleIdList = new ArrayList<>();
         roleIdList.add(roleId);
-        Integer deleteMappingNum = roleResourceMapper.deleteByRoleId(roleIdList);
+        roleResourceMapper.deleteByRoleId(roleIdList);
         List<RoleResource> roleResourceList = getRoleResourceListById(roleResourceParam.getResourceId(), roleId);
         Integer roleResourceNumber = roleResourceMapper.insertRoleResourceList(roleResourceList);
-        if (roleResourceNumber == 0 || deleteMappingNum == 0) {
+        if (roleResourceNumber == 0) {
             log.info("角色资源映射更新异常，操作回滚");
             throw new SystemException(ExceptionInfoEnum.ROLE_RESOURCE_MAPPING_DEAL_EXCEPTION,null);
         }

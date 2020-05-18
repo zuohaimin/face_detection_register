@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<html lang="zh-CN" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>登陆</title>
+    <title>基于人脸识别的登陆系统</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/static/css/dashboard.css}" href="../static/css/dashboard.css" rel="stylesheet">
+    <link th:href="@{/static/icon_font/css/icon_font.css}" rel="stylesheet" type="text/css" href="../static/icon_font/css/icon_font.css"/>
+    <link th:href="@{/static/css/jquery.transfer.css}" rel="stylesheet" type="text/css" href="../static/css/jquery.transfer.css"/>
+    <link th:href="@{/static/css/bootstrap-select.min.css}" rel="stylesheet" type="text/css" href="../static/css/bootstrap-select.min.css"/>
 
     <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
     <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
@@ -18,36 +22,160 @@
     <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#" th:text="#{webSiteName}">基于人脸识别的登陆系统</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">基于人脸识别的登陆系统</a>
         </div>
-        <ul class="nav navbar-nav navbar-right">
-            <li id="registerButton"><a href="#"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
-            <li id="loginButton"><a href="#"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
-        </ul>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
     </div>
 </nav>
-<div id="register" class="container">
-    <form>
-        <input id="username" placeholder="请输入用户名">
-        <input id="base64Image">
-    </form>
-    <video id="video" width="500px" height="500px" autoplay="autoplay"></video>
-    <canvas id="canvas" width="500px" height="500px"></canvas>
-    <button id="getMedia">开启摄像头</button>
-    <button id="snap">拍照</button>
-    <button id="uploadPicture">上传图像</button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar text-center">
+            <div>
+                <div><img style="height: 60px;width: 60px" class="img-circle" alt="" src="https://himg.bdimg.com/sys/portrait/item/pp.1.ee831eef.fxrQQpbVup84u90tfAFE7Q.jpg?tt=1588662695321">
+                     <p style="margin-top: 10px"><strong>来日可期</strong></p>
+                    <hr/>
+                </div>
+            </div>
+
+            <ul class="nav nav-sidebar">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        面部信息统计 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li id="ageDistributePie" class="active"><a href="#">年龄分布图</a></li>
+                        <li id="faceShapePie"><a href="#">脸型比例图</a></li>
+                        <li id="faceValueLine"><a href="#">颜值曲线图</a></li>
+                        <li id="sexRadioChart"><a href="#">性别比例图</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        配置用户信息 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li id="user_role_control" class="active"><a href="#">用户角色管理</a></li>
+                        <li id="role_resource_control"><a href="#">角色资源管理</a></li>
+                        <li><a href="http://localhost:8567">后台资源管理</a></li>
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+        <div id="e_chart" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 id="charts_title" class="page-header">年龄分布图</h1>
+            <div id="echarts_canvas" class="col-sm-12 col-md-8 col-md-offset-2" style="height: 400px"></div>
+        </div>
+        <div id="background_control" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 id="background_title" class="page-header">用户角色管理</h1>
+            <div id="user_select_form" class="form-group">
+                <label for="user_name"><span class="glyphicon glyphicon-user"></span></label>
+                <input id="user_name" placeholder="请输入用户名">
+                <button id="search"><span class="glyphicon glyphicon-search"></span></button>
+                <div id="user-search-result">
+                </div>
+            </div>
+            <div id="selecter" class="col-sm-offset-4 col-md-offset-4 col-lg-offset-4 col-xl-offset-4" hidden>
+                <div>
+                    <span id="element_id" hidden></span>
+                    <span id="element_msg" class="glyphicon glyphicon-user"> : </span>
+                </div>
+                <div class="transfer"></div>
+            </div>
+        </div>
+        <div id="role_resource" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" hidden>
+            <h1 id="role_resource_title" class="page-header">角色资源管理</h1>
+            <div id="role_icon_select">
+                <label id="role_add" class="col-sm-1 col-md-1" ><button class="btn btn-default" data-toggle="modal" data-target="#roleAddModal"><img src="../static/svg/角色添加.svg" alt = "角色添加" style="height: 30px"></button></label>
+                <label id="role_manage" class="col-sm-1 col-md-1 col-sm-offset-1 col-md-offset-2"><button class="btn btn-default"><img src="../static/svg/角色修改.svg" alt = "角色修改" style="height: 30px"></button></label>
+            </div>
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="roleAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                角色添加
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="roleForm" class="form-group">
+                                <label for="roleName"><img src="../static/svg/角色.svg" alt = "角色" style="height: 30px"></label>
+                                <input id="roleName" placeholder="请输入角色名：">
+                                <span id="register_ok_image" class="glyphicon glyphicon-ok" style="color: rgb(78, 140, 255);display:none" ></span>
+                                <span id="register_erro_image" class="glyphicon glyphicon-remove" style="color: rgb(255, 76, 76);display:none"></span>
+                            </form>
+                            <form id="resources-form" class="form-group">
+                                <label for="resources-select"><img src="../static/svg/资源.svg" alt="资源" style="height: 30px"></label>
+                                <select id="resources-select" class="form-control selectpicker" data-live-search="true" multiple>
+                                </select>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="close_modal" type="button" class="btn btn-default" data-dismiss="modal">关闭
+                            </button>
+                            <button id="role_add_btn" type="button" class="btn btn-primary">
+                                提交更改
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+            <div id="resource_control" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" hidden>
+                <div id="resource_form" class="form-group">
+                    <label for="role_name"><img src="../static/svg/角色.svg" alt="角色"  style="height: 30px"/></label>
+                    <input id="role_name" style="width: 710px" placeholder="请输入角色名：">
+                    <button id="search_resource"><span class="glyphicon glyphicon-search"></span></button>
+                    <button id="manage_resource"><span class="glyphicon glyphicon-cog"></span></button>
+                    <button id="delete_role"><span class="glyphicon glyphicon-trash"></span></button>
+                    <select id="role_select" class="form-control selectpicker" multiple data-live-search="true" data-max-options="1" style="width: 174px">
+                    </select>
+                </div>
+                <div id="selecter_resource" class="col-sm-offset-4 col-md-offset-4 col-lg-offset-4 col-xl-offset-4" hidden>
+                    <div>
+                        <label for="role_msg"><img src="../static/svg/角色.svg" alt="角色"  style="height: 30px"/>: </label>
+                        <input id="role_msg"/>
+                    </div>
+                    <div class="resource_transfer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-
-<div id="login"></div>
-
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
+<script th:src="@{/static/js/jquery-3.3.1.min.js}" src="../static/js/jquery-3.3.1.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
-<script src="../static/js/anno.js"></script>
-
+<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+<script th:src="@{/static/js/holder.min.js}" src="../static/js/holder.min.js"></script>
+<script th:src="@{/static/js/backecharts.js}" src="../static/js/backecharts.js"></script>
+<script th:src="@{/static/js/backecharts.js}" src="../static/js/backecharts.js"></script>
+<script th:src="@{/static/js/jquery.transfer.js}" src="../static/js/jquery.transfer.js"></script>
+<script th:src="@{/static/js/backcontrol.js}" src="../static/js/backcontrol.js"></script>
+<script th:src="@{/static/js/bootstrap-select.min.js}" src="../static/js/bootstrap-select.min.js"></script>
 </body>
 </html>

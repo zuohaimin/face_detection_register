@@ -31,6 +31,13 @@ spring:
       client:
         url: http://localhost:8567
         enabled: true
+  mvc:
+    favicon:
+      enabled: false
+#  mvc:
+#    static-path-pattern: /static/**
+#  resources:
+#    static-locations: classpath:/static/
 management:
   endpoints:
     web:
@@ -39,10 +46,6 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
-#  mvc:
-#    static-path-pattern: /static/**
-#  resources:
-#    static-locations: classpath:/static/
 mybatis:
   mapper-locations: classpath:mybatis/mapping/*.xml
   type-aliases-package: cn.edu.swpu.face_detection_register.model.bo
@@ -52,6 +55,15 @@ mybatis:
 application:
   urlResource:
     isScan: true
+#  properties.imagePath=C:\\Users\\Administrator\\Desktop\\OpenCV_Images\\IMAGE\\
+#  #保存人脸路径
+#  properties.facesPath=C:\\Users\\Administrator\\Desktop\\OpenCV_Images\\FACES\\
+#  #人脸识别匹配度
+#  properties.matching=80
+properties:
+  imagePath: D:\\faceRecogniseSource\\IMAGE\\
+  facesPath: D:\\faceRecogniseSource\\FACES\\
+  matching: 80
 
 
 

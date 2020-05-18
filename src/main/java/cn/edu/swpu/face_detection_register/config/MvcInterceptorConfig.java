@@ -32,6 +32,7 @@ public class MvcInterceptorConfig extends WebMvcConfigurationSupport {
                 .addPathPatterns("/userRole/**")
                 .excludePathPatterns("/anno/**")
                 .excludePathPatterns("/*")
+//                .excludePathPatterns("/favicon.ico")
                 .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
         super.addInterceptors(registry);
     }
@@ -42,6 +43,10 @@ public class MvcInterceptorConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+//        registry.addResourceHandler("/*")
+//                .addResourceLocations("classpath:/static/icon/");
         super.addResourceHandlers(registry);
     }
 
