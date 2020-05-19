@@ -102,7 +102,10 @@ public class UrlResourceSchedule {
         List<Resource> resourceList = JSON.parseObject(JSON.toJSONString(allURL),new TypeReference<List<Resource>>(){});
         //添加批次号
         String batchNo = System.currentTimeMillis()+"bn";
-        List<Resource> resources = resourceList.stream().filter(o->o.getRequestType() != null && o.getMethodURL() != null && o.getClassName() != null && o.getMethodName() != null).collect(Collectors.toList());
+        List<Resource> resources =
+                resourceList.stream()
+                            .filter(o->o.getRequestType() != null && o.getMethodURL() != null && o.getClassName() != null && o.getMethodName() != null)
+                            .collect(Collectors.toList());
         resources.forEach(o->{
             o.setBatchNo(batchNo);
             if (o.getClassDesc() == null) {

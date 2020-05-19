@@ -10,4 +10,6 @@ public class UserSelectVo {
     private String userId;
 
     private String userName;
+
+    private String base64Image;
 }

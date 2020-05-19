@@ -30,4 +30,7 @@ public interface UserInfoMapper {
     Integer batchUpdateIsFaceMsg(UserInfo userInfo);
 
     List<UserSelectVo> selectUserList(VerifyUserNameParam verifyUserNameParam);
+
+    UserSelectVo selectByUserId(String userId);
+
 }

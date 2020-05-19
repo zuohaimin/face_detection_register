@@ -83,6 +83,12 @@
         and userName like concat(#{userName},'%')
       </if>
     </select>
+    <select id="selectByUserId" resultType="cn.edu.swpu.face_detection_register.model.vo.UserSelectVo" parameterType="java.lang.String">
+      select userId, userName,base64Image
+      from userinfo
+      where isDelete = 0
+        and userId = #{userId}
+    </select>
 
 
 </mapper>

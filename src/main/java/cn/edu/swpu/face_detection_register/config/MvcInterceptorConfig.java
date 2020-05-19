@@ -15,24 +15,14 @@ public class MvcInterceptorConfig extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        // 反选妨碍健康检查
-//        registry.addInterceptor(logControlInterceptor).addPathPatterns("/**")
-//                .excludePathPatterns("/anno/**")
-//                .excludePathPatterns("/swagger-ui.html")
-//                .excludePathPatterns("/configuration/ui")
-//                .excludePathPatterns("/swagger-resources")
-//                .excludePathPatterns("/configuration/security")
-//                .excludePathPatterns("/v2/api-docs")
-//                .excludePathPatterns("/error")
-//                .excludePathPatterns("/webjars/**")
-//                .excludePathPatterns("/**/favicon.ico");
         registry.addInterceptor(logControlInterceptor)
+                //添加拦截请求路径
                 .addPathPatterns("/background/**")
                 .addPathPatterns("/role/**")
                 .addPathPatterns("/userRole/**")
+                //添加不须拦截请求路径
                 .excludePathPatterns("/anno/**")
                 .excludePathPatterns("/*")
-//                .excludePathPatterns("/favicon.ico")
                 .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
         super.addInterceptors(registry);
     }

@@ -133,7 +133,31 @@ $(function () {
     myEChart = echarts.init(document.getElementById("echarts_canvas"));
     login_token = window.localStorage.getItem("face_detection_token");
     $("#ageDistributePie").click();
+    //显示用户头像，以及用户名
+    showUserIcon(login_token);
 });
+
+function showUserIcon(login_token){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", login_token);
+        },
+        url: urlList[4],
+        success: function (data) {
+            if (data.error_code == 0) {
+               $("#sidebar_user_icon").attr("src",data.result.base64Image);
+               $("#sidebar_user_name").html(data.result.userName);
+            } else {
+                // alert(data.error_msg);
+                window.location.href = baseUrl;
+            }
+
+        }
+    });
+}
+
 
 $("#ageDistributePie").click(function () {
     $("#e_chart").show();
@@ -152,7 +176,7 @@ $("#ageDistributePie").click(function () {
                 myEChart.clear();
                 myEChart.setOption(ageOption);
             } else {
-                alert(data.error_msg);
+                // alert(data.error_msg);
                 window.location.href = baseUrl;
             }
 
@@ -165,7 +189,6 @@ $("#ageDistributePie").click(function () {
     // });
    $("#charts_title").text("年龄分布图");
 });
-
 $("#faceShapePie").click(function () {
     $("#e_chart").show();
     $("#background_control").hide();
@@ -183,7 +206,7 @@ $("#faceShapePie").click(function () {
                 myEChart.clear();
                 myEChart.setOption(faceShapeOption);
             } else {
-                alert(data.error_msg);
+                // alert(data.error_msg);
                 window.location.href = baseUrl;
             }
 
@@ -214,7 +237,7 @@ $("#faceValueLine").click(function () {
                 myEChart.clear();
                 myEChart.setOption(faceValueOption);
             } else {
-                alert(data.error_msg);
+                // alert(data.error_msg);
                 window.location.href = baseUrl;
             }
 
@@ -247,7 +270,7 @@ $("#sexRadioChart").click(function () {
                 myEChart.clear();
                 myEChart.setOption(sexRadioOption);
             } else {
-                alert(data.error_msg);
+                // alert(data.error_msg);
                 window.location.href = baseUrl;
             }
 
@@ -260,10 +283,12 @@ $("#sexRadioChart").click(function () {
     // });
     $("#charts_title").text("性别比例图");
 });
-
+$("#log_out").click(function () {
+    window.location.href = baseUrl;
+});
 function initUrlList() {
     var urlList = [];
-    let path = ["/background/ageDistributePie","/background/faceShapePie","/background/faceValueLine","/background/sexRadioChart"];
+    let path = ["/background/ageDistributePie","/background/faceShapePie","/background/faceValueLine","/background/sexRadioChart","/userRole/getCurrentUserMsg"];
     for(let i = 0; i < path.length; i++) {
         urlList[i] = baseUrl + path[i];
     }

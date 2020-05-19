@@ -18,4 +18,7 @@ public interface IUserRoleService {
     ResponseVo<List<Role>> selectUserRole(UserRoleParam userRoleParam);
 
     ResponseVo<List<UserSelectVo>> selectUserList(VerifyUserNameParam verifyUserNameParam);
+
+    ResponseVo<UserSelectVo> getCurrentUserMsg(String token);
+
 }

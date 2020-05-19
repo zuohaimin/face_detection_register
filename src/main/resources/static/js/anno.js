@@ -3,39 +3,41 @@ $(function () {
     $("#register_page").hide();
     $("#login_page").show();
     $("#login-form").show();
-
-    //处理登陆注册和注册导航页的跳转问题
-    $("#registerButton").click(function () {
-        $("#register_page").show();
-        $("#register-form").show();
-        $("#login_page").hide();
-    });
-    $("#loginButton").click(function () {
-        $("#register_page").hide();
-        $("#login_page").show();
-        $("#login-form").show();
-    });
-
-    $("#register_take_photo").click(function(){
-        //设置用户名表单校验
-        if (verifyUserName($("#register_username").val())) {
-            $("#register-form").hide();
-            $("#register_image").show();
-            $("#register_snap").show();
-            getBase64Image("register_video");
-        }
-    });
-    $("#login_take_photo").click(function(){
-        $("#login-form").hide();
-        $("#login_image").show();
-        $("#login_snap").show();
-        getBase64Image("login_video");
-    });
-
-    // $("#login_snap").click(snapAction("login_canvas","login_video","login_image","login-form"));
-    // $("#register_snap").click(snapAction("register_canvas","register_video","register_image","register-form"));
-
 });
+//处理登陆注册和注册导航页的跳转问题
+$("#registerButton").click(function () {
+    $("#register_page").show();
+    $("#register-form").show();
+    $("#login_page").hide();
+});
+$("#loginButton").click(function () {
+    $("#register_page").hide();
+    $("#login_page").show();
+    $("#login-form").show();
+});
+
+$("#register_take_photo").click(function(){
+    //设置用户名表单校验
+    if (verifyUserName($("#register_username").val())) {
+        $("#register-form").hide();
+        $("#register_image").show();
+        $("#register_snap").show();
+        $("#register_video").show();
+        $("#register_canvas").hide();
+        getBase64Image("register_video");
+    }
+});
+$("#login_take_photo").click(function(){
+    $("#login-form").hide();
+    $("#login_image").show();
+    $("#login_snap").show();
+    $("#login_video").show();
+    $("#login_canvas").hide();
+    getBase64Image("login_video");
+});
+
+// $("#login_snap").click(snapAction("login_canvas","login_video","login_image","login-form"));
+// $("#register_snap").click(snapAction("register_canvas","register_video","register_image","register-form"));
 
 let validUserName;
 function verifyUserName(userName){
@@ -129,6 +131,8 @@ $("#login_snap").click(function () {
             } else {
                 //将错误信息写到看板
                 $("#dashboard").text(errmsg);
+                $("#login_video").show();
+                $("#login_canvas").hide();
             }
 
         }
@@ -147,7 +151,7 @@ $("#register_snap").click(function () {
     let loginVideo = document.getElementById("register_video");
     let ctx = canvas.getContext('2d');
     $("#register_video").hide();
-    ctx.drawImage(loginVideo, loginVideo.offsetLeft, loginVideo.offsetHeight,300,300);
+    ctx.drawImage(loginVideo, loginVideo.offsetLeft, loginVideo.offsetHeight,390,305);
     $("#register_canvas").show();
     base64Image = canvas.toDataURL().substring(22);
     var imageRequestParam = {"base64Image":base64Image};
@@ -168,6 +172,8 @@ $("#register_snap").click(function () {
             } else {
                 //将错误信息写到看板
                 $("#dashboard").text(errmsg);
+                $("#register_video").show();
+                $("#register_canvas").hide();
             }
 
         }
@@ -240,11 +246,12 @@ $("#register").click(function () {
 
 });
 
-$("#snap").click(function () {
-    //获得Canvas对象
-    let canvas = document.getElementById("canvas");
-    let ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, 500, 500);
-});
+
+// $("#snap").click(function () {
+//     //获得Canvas对象
+//     let canvas = document.getElementById("canvas");
+//     let ctx = canvas.getContext('2d');
+//     ctx.drawImage(video, 0, 0, 500, 500);
+// });
 
 

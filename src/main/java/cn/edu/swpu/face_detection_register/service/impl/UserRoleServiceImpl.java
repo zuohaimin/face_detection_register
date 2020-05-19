@@ -12,6 +12,7 @@ import cn.edu.swpu.face_detection_register.model.enums.ExceptionInfoEnum;
 import cn.edu.swpu.face_detection_register.model.vo.ResponseVo;
 import cn.edu.swpu.face_detection_register.model.vo.UserSelectVo;
 import cn.edu.swpu.face_detection_register.service.IUserRoleService;
+import cn.edu.swpu.face_detection_register.util.JWTUtil;
 import cn.edu.swpu.face_detection_register.util.ResponseVoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,5 +110,19 @@ public class UserRoleServiceImpl implements IUserRoleService {
             throw new SystemException(ExceptionInfoEnum.USER_SELECT_NULL,null);
         }
         return ResponseVoUtil.success(userSelectVos);
+    }
+
+    @Override
+    public ResponseVo<UserSelectVo> getCurrentUserMsg(String token) {
+        String userId = JWTUtil.getUserId(token);
+        UserSelectVo userSelectVo = userInfoMapper.selectByUserId(userId);
+        if (userSelectVo == null) {
+            log.info("获取当前用户信息异常");
+            throw new SystemException(ExceptionInfoEnum.USER_SELECT_NULL,null);
+        }
+        StringBuilder sb = new StringBuilder("data:image/jpg;base64,");
+        sb.append(userSelectVo.getBase64Image());
+        userSelectVo.setBase64Image(sb.toString());
+        return ResponseVoUtil.success(userSelectVo);
     }
 }

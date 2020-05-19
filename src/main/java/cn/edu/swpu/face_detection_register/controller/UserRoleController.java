@@ -54,4 +54,10 @@ public class UserRoleController {
         return userRoleService.selectUserList(verifyUserNameParam);
     }
 
+    @ApiOperation(value = "获取当前用户信息")
+    @GetMapping(value = "getCurrentUserMsg")
+    public ResponseVo<UserSelectVo> getCurrentUserMsg(@RequestHeader(value = "Authorization")String token){
+        return userRoleService.getCurrentUserMsg(token);
+    }
+
 }

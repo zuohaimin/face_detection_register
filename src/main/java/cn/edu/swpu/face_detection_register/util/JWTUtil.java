@@ -26,9 +26,12 @@ public class JWTUtil {
         map.put("alg", "HS256");
         map.put("typ", "JWT");
         return JWT.create().withHeader(map)
+                    //构造有效载荷
                     .withClaim("userId",userId)
                     .withIssuedAt(TimeUtil.LocalDateTime2Date(now))
+                    //构造过期时间
                     .withExpiresAt(TimeUtil.LocalDateTime2Date(expireTime))
+                    //构造签名
                     .sign(Algorithm.HMAC256(secret));
     }
 
@@ -41,7 +44,7 @@ public class JWTUtil {
             e.printStackTrace();
            throw new SystemException(ExceptionInfoEnum.TOKEN_NOT_VALID,null);
         }
-        return decodedJWT.getClaim("userId").toString();
+        return decodedJWT.getClaim("userId").asString();
     }
 
     public static String getUserId(String token){
@@ -52,5 +55,11 @@ public class JWTUtil {
            e.printStackTrace();
            throw new SystemException(ExceptionInfoEnum.TOKEN_NOT_VALID, null);
         }
+    }
+
+    public static void main(String[] args) {
+        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODk4NzA2MTYsInVzZXJJZCI6IjMzYTk3MTZhMDQxNjRhNTM5MWYzMmRmYWU3NDRlNDA2IiwiaWF0IjoxNTg5ODY4ODE2fQ.BSPkeTVahdY8zt1D9mdFms2Qy_Ebmj3R0kdL_ki7s2M";
+        String s = verifyToken(token, "202045");
+        System.out.println(s);
     }
 }
