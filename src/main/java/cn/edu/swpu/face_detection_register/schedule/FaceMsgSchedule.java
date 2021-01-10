@@ -17,5 +17,4 @@ public class FaceMsgSchedule {
         log.info("开始执行人脸信息扫描任务 ...");
         faceMsgScheduleService.createFaceMsg();
     }
-
 }

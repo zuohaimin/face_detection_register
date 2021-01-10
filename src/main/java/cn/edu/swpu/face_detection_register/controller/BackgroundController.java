@@ -43,5 +43,4 @@ public class BackgroundController {
     public ResponseVo<List<EchartsDataVo>> ageDistributePie(){
         return echartsService.ageDistributePie();
     }
-
 }

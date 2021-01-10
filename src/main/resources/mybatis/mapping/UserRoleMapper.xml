@@ -27,9 +27,9 @@
     </where>
   </delete>
   <insert id="insert" parameterType="cn.edu.swpu.face_detection_register.model.bo.UserRole">
-    insert into userrole (keyId, userId, roleId
+    insert into userrole (userId, roleId
       )
-    values (#{keyId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=BIGINT}
+    values (#{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=BIGINT}
       )
   </insert>
     <insert id="insertUserRoleList"  parameterType="cn.edu.swpu.face_detection_register.model.bo.UserRole">

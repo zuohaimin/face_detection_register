@@ -101,7 +101,7 @@ public class AuthoriseAspectJ {
     /**
      * 对注册接口切面，对注册人脸进行人脸信息预处理
      */
-    @AfterReturning(value = "execution(public *  cn.edu.swpu.face_detection_register.controller.PersonLoginController.register(*))",returning = "result")
+//    @AfterReturning(value = "execution(public *  cn.edu.swpu.face_detection_register.controller.PersonLoginController.register(*))",returning = "result")
     public void grayScaleFace(JoinPoint joinPoint,ResponseVo<Boolean> result){
        //对注册人脸进行预处理
         //排除注册失败的情况

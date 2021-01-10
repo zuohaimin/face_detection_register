@@ -284,6 +284,7 @@ $("#sexRadioChart").click(function () {
     $("#charts_title").text("性别比例图");
 });
 $("#log_out").click(function () {
+    window.localStorage.removeItem("face_detection_token");
     window.location.href = baseUrl;
 });
 function initUrlList() {

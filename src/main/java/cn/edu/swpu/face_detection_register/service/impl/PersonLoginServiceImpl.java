@@ -1,8 +1,10 @@
 package cn.edu.swpu.face_detection_register.service.impl;
 
 import cn.edu.swpu.face_detection_register.dao.UserInfoMapper;
+import cn.edu.swpu.face_detection_register.dao.UserRoleMapper;
 import cn.edu.swpu.face_detection_register.exception.SystemException;
 import cn.edu.swpu.face_detection_register.model.bo.UserInfo;
+import cn.edu.swpu.face_detection_register.model.bo.UserRole;
 import cn.edu.swpu.face_detection_register.model.dto.FaceRequestParam;
 import cn.edu.swpu.face_detection_register.model.dto.RegisterRequestParam;
 import cn.edu.swpu.face_detection_register.model.dto.VerifyUserNameParam;
@@ -13,10 +15,12 @@ import cn.edu.swpu.face_detection_register.service.IFaceDetectionService;
 import cn.edu.swpu.face_detection_register.service.IPersonLoginService;
 import cn.edu.swpu.face_detection_register.util.JWTUtil;
 import cn.edu.swpu.face_detection_register.util.ResponseVoUtil;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +33,9 @@ public class PersonLoginServiceImpl implements IPersonLoginService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @Value("${jwt.secret:#{'202045'}}")
     private String secret;
@@ -73,6 +80,7 @@ public class PersonLoginServiceImpl implements IPersonLoginService {
         return searchFaceVoResponseVo;
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResponseVo<Boolean> personRegister(RegisterRequestParam registerRequestParam) {
         //调用查询接口，确认用户是否已经注册
         ResponseVo<SearchFaceVo> searchFaceVoResponseVo = getSearchFaceResponseVo(registerRequestParam.getBase64Image());
@@ -108,9 +116,14 @@ public class PersonLoginServiceImpl implements IPersonLoginService {
         if (userInfoSelect != null) {
             throw new SystemException(ExceptionInfoEnum.REPEAT_REGISTER,false);
         }
-        //用户表出入数据
+        //用户表插入数据
         int count = userInfoMapper.insert(userInfo);
-        if (count < 1) {
+        //为用户关联系统默认普通用户角色
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userId);
+        userRole.setRoleId(Long.valueOf(1L));
+        int userRoleNum = userRoleMapper.insert(userRole);
+        if (count < 1 || userRoleNum < 1) {
             throw new SystemException(ExceptionInfoEnum.USERINFO_INSERT_EXCEPTION,false);
         }
         return ResponseVoUtil.success(true);

@@ -27,7 +27,8 @@ $("#register_take_photo").click(function(){
         getBase64Image("register_video");
     }
 });
-$("#login_take_photo").click(function(){
+$("#login_take_photo").click(function(e){
+    e.preventDefault();
     $("#login-form").hide();
     $("#login_image").show();
     $("#login_snap").show();
@@ -131,8 +132,8 @@ $("#login_snap").click(function () {
             } else {
                 //将错误信息写到看板
                 $("#dashboard").text(errmsg);
-                $("#login_video").show();
-                $("#login_canvas").hide();
+                $("#login_video").hide();
+                $("#login_canvas").show();
             }
 
         }
@@ -234,7 +235,7 @@ $("#register").click(function () {
             console.log(data);
             var errmsg = data.error_msg;
             if (errmsg === "SUCCESS") {
-                $("#dashboard").text("注册成功，请前往注册页面登陆");
+                $("#dashboard").text("注册成功，请前往登陆页面登陆");
                 $("#base64Image").empty();
             } else {
                 //将错误信息写到看板
@@ -246,6 +247,9 @@ $("#register").click(function () {
 
 });
 
+$("#register_username").change(function () {
+    verifyUserName($("#register_username").val());
+});
 
 // $("#snap").click(function () {
 //     //获得Canvas对象

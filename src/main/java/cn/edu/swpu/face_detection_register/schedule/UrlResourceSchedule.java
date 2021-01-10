@@ -99,12 +99,13 @@ public class UrlResourceSchedule {
             return;
         }
         List<Map<String, String>> allURL = getAllURL();
-        List<Resource> resourceList = JSON.parseObject(JSON.toJSONString(allURL),new TypeReference<List<Resource>>(){});
+        List<Resource> resourceList = JSON.parseObject(JSON.toJSONString(allURL),
+                                      new TypeReference<List<Resource>>(){});
         //添加批次号
         String batchNo = System.currentTimeMillis()+"bn";
         List<Resource> resources =
                 resourceList.stream()
-                            .filter(o->o.getRequestType() != null && o.getMethodURL() != null && o.getClassName() != null && o.getMethodName() != null)
+                            .filter(o->isfilter(o))
                             .collect(Collectors.toList());
         resources.forEach(o->{
             o.setBatchNo(batchNo);
@@ -122,5 +123,9 @@ public class UrlResourceSchedule {
             throw new SystemException(ExceptionInfoEnum.SCAN_URL_RESOURCE_EXCEPTION,null);
         }
         isScan = true;
+    }
+
+    private boolean isfilter(Resource o){
+        return o.getRequestType() != null && o.getMethodURL() != null && o.getClassName() != null && o.getMethodName() != null;
     }
 }
